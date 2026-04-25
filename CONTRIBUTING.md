@@ -138,6 +138,19 @@ bash /tmp/test-vault/scripts/kms_health.sh
   - `fix: bootstrap.sh 不处理 profile 名含空格的情况`
 - PR 描述包含：动机、改动要点、是否 breaking
 
+## 项目入口文件实践
+
+如果你将 Muninn 应用到自己的项目，入口文件（`CLAUDE.md` / `AGENTS.md` /
+`.github/copilot-instructions.md` 等）的内容应符合 [`docs/agent-onboarding.md`](docs/agent-onboarding.md)
+定义的"必要内容契约"。该文档：
+
+- 列出 10 项必含字段（宪法版本 / vault 路径 / 角色边界 / R08 三档 / 启动顺序等）
+- 提供整段可复制的入口文件模板
+- 比较 3 种多入口文件同步策略（symlink / 同步声明 / 各自实现）
+- 含合格检查清单
+
+**Muninn 不强制文件名**，由项目和工具链决定，但**内容契约应一致**。
+
 ## 行为准则
 
 - 对新人友好

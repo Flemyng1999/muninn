@@ -65,7 +65,10 @@ muninn/
 │   └── engineering/              # 工程师 profile（WIP，欢迎 PR）
 ├── docs/
 │   ├── philosophy.md             # 为什么这样设计
-│   └── profile-comparison.md     # profile 对比
+│   ├── profile-comparison.md     # profile 对比
+│   ├── repo-vault-interface.md   # repo ↔ vault 接口契约模板
+│   ├── agent-onboarding.md       # 项目入口文件实践（10 项内容契约）
+│   └── known-issues.md           # 已知问题与技术债务清单
 ├── examples/                     # 示例（3 套）
 │   ├── research-full/            # 完整研究示例：城市乌鸦工具使用演化
 │   ├── product-teaser/           # 产品 teaser：决策卡 + 用户画像
@@ -145,6 +148,18 @@ bash scripts/kms_health.sh --save     # 保存到 out/kms_health/YYYY-MM-DD.md
 1. **SSOT** —— 核心定义只在一处
 2. **Arbiter-Executor 角色边界** —— AI 有明确制度限制
 3. **三层分离** —— 宪法 / 工作流 / 数据各自独立演化
+
+## 关键文档
+
+| 文档 | 用途 |
+|---|---|
+| [docs/philosophy.md](docs/philosophy.md) | 设计哲学 / 为什么这样做 |
+| [docs/profile-comparison.md](docs/profile-comparison.md) | research / product / engineering profile 对比 |
+| [docs/repo-vault-interface.md](docs/repo-vault-interface.md) | 项目仓库 ↔ vault 接口契约模板 |
+| [docs/agent-onboarding.md](docs/agent-onboarding.md) | 入口文件（CLAUDE.md / AGENTS.md / ...）必含字段契约 |
+| [docs/known-issues.md](docs/known-issues.md) | 已知问题与技术债务清单 |
+| [QUICKSTART.md](QUICKSTART.md) | 5 分钟起步 |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献新 profile / 工作流 / schema 扩展 |
 
 ## 贡献
 
