@@ -1,0 +1,39 @@
+# ============================================================================
+#  project_<YOUR_PROJECT>.yaml — 按本模板复制一份，改名为你自己的项目
+#  修改权限：Arbiter（你）
+# ============================================================================
+
+meta:
+  project_id: "<YOUR_PROJECT>"
+  project_name_zh: "<中文名>"
+  project_name_en: "<English Name>"
+  version: "0.1.0"
+  created: "YYYY-MM-DD"
+  last_reviewed: "YYYY-MM-DD"
+  scope_under_constitution: "<YOUR_PROJECT> + L0/L1"
+  repo_path: "<项目仓库绝对路径>"
+  memory_path: "<AI memory 绝对路径，可选>"
+
+core_concepts:
+  # 列 5–10 张跨文档被反复引用的核心概念，它们会被 R01 保护必须在 _Concepts/ 独一主卡
+  # - name: "<术语>"
+  #   aliases: ["<别名1>", "<别名2>"]
+  #   master_card: "概念-<术语>"
+  #   tier: "L1"            # L1=通用 / L2=本项目特有
+  #   scope: "global"       # global / project:<YOUR_PROJECT>
+
+gate_status:
+  source_of_truth: "PROJECT.md"
+  snapshot_date: "YYYY-MM-DD"
+  gates:
+    # gate_0_<name>: "TODO"
+
+paths:
+  narrative_spine: "02-Projects/<项目中文名>.md"
+  daily_log_dir: "log/"
+  obsidian_log_dir: "00-Journal/"
+  concept_cards_dir: "_Concepts/"
+  concept_cards_glob: "_Concepts/概念-*.md"
+  domain_moc_glob: "_Concepts/@索引-*.md"
+  insight_cards_glob: "03-Zettelkasten/洞察-*.md"
+  draft_cards_dir: "03-Zettelkasten/"

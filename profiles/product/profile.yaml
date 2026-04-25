@@ -1,0 +1,27 @@
+id: product
+name: 产品 KMS Profile
+description: 产品经理 / 设计师 / 创业者。沉淀对象：用户访谈、决策、竞品、OKR、画像。
+status: wip                         # work in progress — 邀请社区贡献
+core_version_required: ">=0.1.3"
+maintainer: "TBD"
+
+extras:
+  workflows:
+    # - 工作流-用户访谈沉淀-规范落库           # TODO
+    # - 工作流-决策记录-ADR式                  # TODO
+    # - 工作流-竞品调研-规范落库              # TODO
+  data_dirs:
+    - 01-Interviews                           # 用户访谈（TODO）
+    - 01-Decisions                            # 决策记录 ADR 式（TODO）
+    - 01-Competitors                          # 竞品卡（TODO）
+  schema_extensions:
+    # - decision.yaml                         # TODO
+    # - persona.yaml                          # TODO
+    # - okr.yaml                              # TODO
+  project_yaml_template: project_TEMPLATE_product.yaml   # TODO
+
+typical_use_cases:
+  - 访谈用户 → AI 按模板起访谈卡 + 提取洞察 seedling
+  - 做重大产品决策 → ADR 式决策卡（含 options / tradeoffs / decision）
+  - 季度 OKR → 关键结果卡 + 每周复盘链接
+  - 竞品分析 → 竞品卡 + 差异矩阵

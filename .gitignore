@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Obsidian workspace state（每个用户不同）
+**/.obsidian/workspace.json
+**/.obsidian/workspace-mobile.json
+**/.obsidian/workspace.json.bak
+
+# Editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Local outputs
+out/
+.muninn-version    # bootstrap 产生的 vault 元数据，不在 source repo 里

@@ -1,0 +1,37 @@
+# schema 扩展：Gate 判据卡（research profile）
+# 用于定义项目的阶段性关卡（如 Gate α / β / γ）
+
+type: gate_criterion
+file_name_prefix: "概念-Gate"
+
+required_frontmatter:
+  - id
+  - type              # 固定 "concept"
+  - status            # seedling / live / archived
+  - authoritative     # Gate 判据必须 authoritative: true
+  - scope
+  - tier              # 通常 L2
+  - created
+  - last_reviewed
+  - tags
+
+extra_fields:
+  - name: gate_name
+    description: Gate 英文名，如 "gate_alpha_spectral_separability"
+    required: true
+  - name: criterion_version
+    description: 判据版本号（定版后才能 flip authoritative: true）
+    required: true
+  - name: pass_condition
+    description: 过线硬条件（可定量表达）
+    required: true
+  - name: fail_fallback
+    description: 不过线时的退路
+    required: false
+
+recommended_body_sections:
+  - "## 定义"
+  - "## 过线硬条件"
+  - "## 证据汇总"
+  - "## 退路 / 失败处置"
+  - "## 关联"

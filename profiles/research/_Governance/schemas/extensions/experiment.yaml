@@ -1,0 +1,40 @@
+# schema 扩展：实验卡（research profile）
+# 放在 _Concepts/ 或 03-Zettelkasten/ 下命名为 实验-*.md 的卡
+
+type: experiment
+file_name_prefix: "实验-"
+
+required_frontmatter:
+  - id
+  - type              # 固定 "experiment"
+  - status            # seedling / live / archived / retracted
+  - scope             # project:<project_id>
+  - created
+  - last_reviewed
+  - related
+  - tags
+
+extra_fields:
+  - name: experiment_id
+    description: 实验编号，如 E3, Phase6-sweep
+    required: true
+  - name: hypothesis
+    description: 实验假设（一句话）
+    required: true
+  - name: metric
+    description: 判据指标 + 阈值
+    required: true
+  - name: result
+    description: PASS / FAIL / INCONCLUSIVE
+    required: true
+  - name: evidence_artifact
+    description: 结果物路径（out/*.json / fig/*.png 等）
+    required: false
+
+recommended_body_sections:
+  - "## 假设"
+  - "## 方法"
+  - "## 判据"
+  - "## 结果"
+  - "## 边界 / 局限"
+  - "## 关联"

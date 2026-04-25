@@ -1,0 +1,41 @@
+# ============================================================================
+#  project_<YOUR_PROJECT>.yaml (research profile)
+#  修改权限：Arbiter（你）
+# ============================================================================
+
+meta:
+  project_id: "<YOUR_PROJECT>"
+  project_name_zh: "<中文名>"
+  project_name_en: "<English Name>"
+  version: "0.1.0"
+  created: "YYYY-MM-DD"
+  last_reviewed: "YYYY-MM-DD"
+  scope_under_constitution: "<YOUR_PROJECT> + L0/L1"
+  repo_path: "<项目仓库绝对路径>"
+
+# 核心概念：5–10 张主卡级别术语（跨 3 篇以上被引用才算核心）
+# tier: L1 = 跨项目通用（scope: global） / L2 = 本项目特有（scope: project:<YOUR_PROJECT>）
+core_concepts:
+  # - name: "<术语>"
+  #   aliases: ["<别名1>", "<别名2>"]
+  #   master_card: "概念-<术语>"
+  #   tier: "L1"
+  #   scope: "global"
+
+# Gate 判据：研究项目常用的 Gate 式进度门
+gate_status:
+  source_of_truth: "PROJECT.md"
+  snapshot_date: "YYYY-MM-DD"
+  gates:
+    # gate_0_<name>: "TODO"  # 可用值：TODO / IN_PROGRESS / PASS / FAIL
+
+paths:
+  narrative_spine: "02-Projects/<项目中文名>.md"
+  daily_log_dir: "log/"
+  obsidian_log_dir: "00-Journal/"
+  concept_cards_dir: "_Concepts/"
+  concept_cards_glob: "_Concepts/概念-*.md"
+  domain_moc_glob: "_Concepts/@索引-*.md"
+  insight_cards_glob: "03-Zettelkasten/洞察-*.md"
+  draft_cards_dir: "03-Zettelkasten/"
+  literature_dir: "01-Literature/"                                  # research profile 特有

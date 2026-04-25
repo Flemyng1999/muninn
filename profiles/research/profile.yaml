@@ -1,0 +1,22 @@
+id: research
+name: 科研 KMS Profile
+description: 博士生 / 研究员 / 学术工作者。沉淀对象：论文、实验、Gate 判据、核心概念。
+status: stable
+core_version_required: ">=0.1.3"
+maintainer: "@flemyng"
+
+extras:
+  workflows:
+    - 工作流-文献沉淀-规范落库
+  data_dirs:
+    - 01-Literature
+  schema_extensions:
+    - experiment.yaml
+    - gate.yaml
+  project_yaml_template: project_TEMPLATE_research.yaml
+
+typical_use_cases:
+  - 读完一篇论文 → AI 按规范起 01-Literature/<Author><Year>-<topic>.md
+  - 实验跑完有结论 → Journal 记 + 升级 03-Zettelkasten/洞察-xxx
+  - 关键概念定型 → _Concepts/概念-xxx.md 主卡
+  - Gate 判据定版 → _Concepts/概念-Gate<α|β|γ>-判据定版.md

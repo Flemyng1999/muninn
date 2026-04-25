@@ -1,0 +1,127 @@
+# ============================================================================
+#  概念主卡 YAML Schema — 03-Zettelkasten/概念-*.md 的补充规范
+#  继承 card.yaml，添加额外强制字段
+# ============================================================================
+
+schema_name: "concept"
+version: "0.1"
+extends: "card.yaml"
+applies_to:
+  - "03-Zettelkasten/概念-*.md"
+  - "尤其是 rules.yaml 中 core_concepts 列表的主卡"
+
+# ----------------------------------------------------------------------------
+#  在 card.yaml 基础上额外强制
+# ----------------------------------------------------------------------------
+additional_required:
+  type:
+    fixed: "concept"
+
+  canonical_name:
+    type: string
+    description: "概念的规范名（可能含 λ / Unicode 符号），用于正文第一行标题"
+    example: "S_k(λ)"
+
+  aliases:
+    type: string_list
+    description: "等价写法，供跨文检索与 CI 裸定义扫描"
+    example: ["Sk", "S_k", "光谱核", "spectral kernel"]
+
+  authoritative:
+    type: boolean
+    description: "是否为该概念的 SSOT 主卡（core_concepts 中仅有一张为 true）"
+    default: false
+
+# ----------------------------------------------------------------------------
+#  正文结构约定（非 YAML，但是概念卡必备章节）
+# ----------------------------------------------------------------------------
+body_sections:
+  mandatory:
+    - "# <canonical_name> — <简短描述>"
+    - "## 定义"                    # 一句话操作化定义
+    - "## 数学/物理形式"            # 公式或物理表达
+    - "## 边界与假设"               # 何时适用，何时不适用
+    - "## 相关卡片"                 # 明确的 [[links]]
+
+  optional:
+    - "## 落地与反演"               # 如何从数据估计
+    - "## 历史与 supersede 链"      # 如果本卡推翻旧卡
+    - "## 引用文献"                 # lit 卡链接
+
+# ----------------------------------------------------------------------------
+#  命名约定
+# ----------------------------------------------------------------------------
+naming:
+  pattern: "概念-<短名>-<核心性质>"
+  examples:
+    - "概念-Sk-光谱核"
+    - "概念-ωL-叶片单次散射反照率"
+    - "概念-pW-状态分布"
+    - "概念-Gateα-判据定版"
+  rules:
+    - "禁止大小写混用的 ASCII 缩写单独使用（如 Sk 可，SK 不可）"
+    - "核心性质字段 ≤ 10 字"
+    - "禁用空格（用短横线分隔）"
+
+# ----------------------------------------------------------------------------
+#  SSOT 主卡的额外约束
+# ----------------------------------------------------------------------------
+ssot_master_card:
+  condition: "authoritative: true"
+  constraints:
+    - "一个 aliases 集合中至多一张 authoritative=true 的卡"
+    - "其他位置禁止重复 '## 定义' 小节；只能 [[link]]"
+    - "status 变更为 superseded 时必须同时有新的 authoritative=true 卡"
+  lifecycle_ref: "R08 §8.5 — authoritative bit 激活/撤销仪式"
+  sync_transition:
+    rule: "新卡激活 authoritative:true + 旧卡撤销 authoritative:false 必须同一 PR 完成"
+    rationale: "避免两张 authoritative=true 同时存在或都为 false 的空窗期"
+    violation_level: "block"
+
+# ----------------------------------------------------------------------------
+#  模板
+# ----------------------------------------------------------------------------
+template: |
+  ---
+  id: 概念-Sk-光谱核
+  type: concept
+  status: live
+  scope: project:<YOUR_PROJECT>
+  created: 2026-04-23
+  last_reviewed: 2026-04-23
+  canonical_name: "S_k(λ)"
+  aliases: [Sk, S_k, 光谱核, spectral kernel]
+  authoritative: true
+  source: "derivation:path-decomposition"
+  related:
+    - "[[概念-ωL-叶片单次散射反照率]]"
+    - "[[概念-wk-几何权重]]"
+    - "[[概念-R三路径-dir1-dif1-ms]]"
+  tags: [path-decomposition, spectral]
+  ---
+
+  # S_k(λ) — 光谱核
+
+  ## 定义
+  路径 k 下的光谱响应函数，λ-dependent，x-independent（像元间均匀）。
+  总反射率 R(x, λ) = Σ_k w_k(x) · S_k(λ)。
+
+  ## 数学/物理形式
+  - S_dir1 ∝ ωL(λ)
+  - S_dif1 ∝ ωL(λ)
+  - S_ms   ∝ ωL(λ)^K̄  （K̄ ≥ 2）
+
+  其中 ωL(λ) = ρ_leaf(λ) + τ_leaf(λ) 为叶片单次散射反照率。
+
+  ## 边界与假设
+  - 假设叶片光学性质在成像区域内统计均匀（Gate α 的验证对象）
+  - K̄ 在 ms 中并非整数，是有效阶数
+
+  ## 落地与反演
+  - ωL(λ) 来源三种途径：PROSPECT 反演 / 叶片实测 / 多 SZA 图像联合估计
+  - 详见 [[洞察-Sk落地挑战-ωL获取]]
+
+  ## 相关卡片
+  - [[概念-ωL-叶片单次散射反照率]]（S_k 的参数源头）
+  - [[概念-wk-几何权重]]（S_k 的配对量）
+  - [[概念-R三路径-dir1-dif1-ms]]（R = Σ w·S 的全貌）

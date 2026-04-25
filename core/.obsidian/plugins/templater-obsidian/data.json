@@ -1,0 +1,48 @@
+{
+  "command_timeout": 5,
+  "templates_folder": "_Templates",
+  "templates_pairs": [
+    [
+      "",
+      ""
+    ]
+  ],
+  "trigger_on_file_creation": true,
+  "auto_jump_to_cursor": false,
+  "enable_system_commands": false,
+  "shell_path": "",
+  "user_scripts_folder": "",
+  "enable_folder_templates": true,
+  "folder_templates": [
+    {
+      "folder": "00-Journal",
+      "template": "_Templates/每日模版.md"
+    },
+    {
+      "folder": "01-Literature",
+      "template": "_Templates/文献笔记模板.md"
+    },
+    {
+      "folder": "02-Projects",
+      "template": "_Templates/项目MOC模板.md"
+    },
+    {
+      "folder": "03-Zettelkasten",
+      "template": "_Templates/卡片盒模版.md"
+    }
+  ],
+  "enable_file_templates": false,
+  "file_templates": [
+    {
+      "regex": ".*",
+      "template": ""
+    }
+  ],
+  "syntax_highlighting": true,
+  "syntax_highlighting_mobile": false,
+  "enabled_templates_hotkeys": [
+    ""
+  ],
+  "startup_templates": [],
+  "intellisense_render": 1
+}

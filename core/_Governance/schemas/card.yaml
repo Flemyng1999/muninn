@@ -1,0 +1,162 @@
+# ============================================================================
+#  通用卡片 YAML Schema — 所有 03-Zettelkasten/*.md 的 frontmatter 规范
+#  由 R02 强制
+# ============================================================================
+
+schema_name: "card"
+version: "0.2"
+applies_to:
+  - "03-Zettelkasten/*.md"
+  - "_Governance/*.md（治理文件也必须合规）"
+
+# ----------------------------------------------------------------------------
+#  必选字段
+# ----------------------------------------------------------------------------
+required:
+  id:
+    type: string
+    description: "唯一标识，等于文件名 stem（去掉 .md）"
+    example: "概念-Sk-光谱核"
+
+  type:
+    type: enum
+    values:
+      - concept      # 核心概念（SSOT 主卡候选）
+      - insight      # 洞察（推导得出的非平凡结论）
+      - thought      # 思考（方法论 / 研究心法）
+      - law          # 定律（物理定律 / 数学定理）
+      - pitfall      # 踩坑
+      - experience   # 经验（操作性 know-how）
+      - typography   # 排版规范
+      - literature   # 文献卡
+      - governance   # 治理文件
+    description: "决定卡片归属与检索路由"
+
+  status:
+    type: enum
+    values:
+      - seedling     # 新建 72h 内或未挂接
+      - live         # 正式生效
+      - superseded   # 被新卡推翻；必须配合 superseded_by + supersede_date
+      - deprecated   # 方向性废弃；必须配合 deprecation_reason + deprecation_date (R08 §8.1)
+      - retracted    # 结论被证伪；必须配合 retraction_reason + retraction_date + 正文 RETRACTED banner (R08 §8.1/§8.4)
+      - archived     # 历史保留，不再活跃
+    default: "seedling"
+    lifecycle_ref: "R08 in rules.yaml"
+
+  scope:
+    type: string
+    description: "global | project:<name>"
+    examples: ["global", "project:<YOUR_PROJECT>"]
+
+  created:
+    type: date
+    format: "YYYY-MM-DD"
+
+  last_reviewed:
+    type: date
+    format: "YYYY-MM-DD"
+    description: "最近一次由 Curator 或 Arbiter 确认仍然正确的日期"
+
+# ----------------------------------------------------------------------------
+#  可选字段
+# ----------------------------------------------------------------------------
+optional:
+  supersedes:
+    type: wikilink_list
+    description: "本卡推翻了哪些旧卡"
+    example: "[[旧卡A]], [[旧卡B]]"
+
+  superseded_by:
+    type: wikilink_list
+    description: "本卡被哪张新卡推翻；与 status: superseded 配对"
+
+  supersede_date:
+    type: date
+    format: "YYYY-MM-DD"
+    description: "status 变为 superseded 的日期；R08 §8.1 要求"
+
+  deprecation_reason:
+    type: string
+    description: "方向性废弃的一句话原因；R08 §8.1 要求 status:deprecated 必填"
+
+  deprecation_date:
+    type: date
+    format: "YYYY-MM-DD"
+    description: "status 变为 deprecated 的日期；R08 §8.1 要求"
+
+  retraction_reason:
+    type: string
+    description: "结论撤回的一句话原因；R08 §8.1 要求 status:retracted 必填"
+
+  retraction_date:
+    type: date
+    format: "YYYY-MM-DD"
+    description: "status 变为 retracted 的日期；R08 §8.1 要求"
+
+  related:
+    type: wikilink_list
+    description: "相关（非 supersede 关系）的卡"
+
+  source:
+    type: string
+    description: "原始来源：log 日期 / 文献 / 推导"
+    examples:
+      - "log:2026-04-22"
+      - "lit:Knyazikhin2013-DASF"
+      - "derivation:math-notes-2026-04-15"
+
+  tags:
+    type: string_list
+    description: "标签，供 Dataview/Bases 过滤"
+
+  maturity:
+    type: enum
+    values: [seedling, budding, evergreen]
+    description: "可选的数字花园成熟度标记；不参与 CI 阻断"
+
+# ----------------------------------------------------------------------------
+#  字段联动规则
+# ----------------------------------------------------------------------------
+invariants:
+  - name: "status=superseded 必须有 superseded_by + supersede_date"
+    check: "if status == 'superseded' then superseded_by != null and supersede_date != null"
+
+  - name: "supersedes/superseded_by 必须双向一致"
+    check: "A.superseded_by == [B] implies B.supersedes contains A"
+
+  - name: "status=deprecated 必须有 deprecation_reason + deprecation_date"
+    check: "if status == 'deprecated' then deprecation_reason != null and deprecation_date != null"
+    rule_ref: "R08 §8.1"
+
+  - name: "status=retracted 必须有 retraction_reason + retraction_date + 正文 RETRACTED banner"
+    check: "if status == 'retracted' then retraction_reason != null and retraction_date != null and body_first_section contains 'RETRACTED'"
+    rule_ref: "R08 §8.1 / §8.4"
+
+  - name: "last_reviewed >= created"
+    check: "last_reviewed 日期不早于 created"
+
+  - name: "type=concept 应优先出现在 core_concepts 主卡清单"
+    check: "建议而非强制；触发 warn"
+
+# ----------------------------------------------------------------------------
+#  模板样例
+# ----------------------------------------------------------------------------
+template_example: |
+  ---
+  id: 概念-Sk-光谱核
+  type: concept
+  status: live
+  scope: project:<YOUR_PROJECT>
+  created: 2026-04-23
+  last_reviewed: 2026-04-23
+  source: derivation:path-decomposition
+  related:
+    - "[[概念-ωL-叶片单次散射反照率]]"
+    - "[[概念-wk-几何权重]]"
+  tags: [path-decomposition, spectral]
+  ---
+
+  # S_k(λ) — 光谱核
+
+  ...正文...

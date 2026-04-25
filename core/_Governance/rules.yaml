@@ -1,0 +1,405 @@
+# ============================================================================
+#  rules.yaml — 宪法 v0.1.1 机读法条（通用部分，不含项目特定数据）
+#  项目特定 core_concepts 清单见 _Governance/project_<name>.yaml
+#  修改此文件需 Arbiter 批准，并在 CHANGELOG.md 留痕
+# ============================================================================
+
+meta:
+  version: "0.1.3"
+  created: "2026-04-23"
+  last_reviewed: "2026-04-24"
+  scope: "<YOUR_PROJECT> + L0/L1"      # 当前试点范围（宪法层）
+  max_rules: 20
+  current_rules: 8
+  project_profiles:                         # 项目特定数据文件，R01 扫描时读取
+    - "_Governance/project_<YOUR_PROJECT>.yaml"
+
+# ----------------------------------------------------------------------------
+#  R01 — SSOT 唯一主卡
+# ----------------------------------------------------------------------------
+R01_ssot_master_card:
+  purpose: "消除核心概念的双真相与多点裸定义"
+  serves_goal: ["a", "b"]
+  core_concepts_source: "project_<name>.yaml 的 core_concepts 段"  # v0.1.1：已从本文件迁出
+  trigger:
+    - "任何文档（log / notebook / docs / memory）想定义所辖项目 core_concepts 中的任一概念"
+  action:
+    required: "用 `[[master_card]]` 引用；禁止重复写定义"
+    creating_master_card: "仅 Arbiter 可执行；Curator 以 PR 形式提议"
+  actor: "Author/Curator（提议）+ Arbiter（批准建卡）"
+  violation_level: "block"  # CI 报警，建议拒绝 merge
+  enforcement:
+    - "scripts/kms_health.sh 扫描 core_concepts 的裸定义位置数"
+    - "周报告列出违规点"
+  friction_cost: "low (引用 [[link]] 比重写定义更省力)"
+
+# ----------------------------------------------------------------------------
+#  R02 — YAML 元数据强制
+# ----------------------------------------------------------------------------
+R02_yaml_metadata:
+  purpose: "让新鲜度机读，告别 0% status 覆盖"
+  serves_goal: ["a", "b"]
+  trigger:
+    - "创建新卡"
+    - "编辑已有卡的正文（非 typo）"
+  action:
+    required_fields:
+      - "id"               # 文件名 stem
+      - "type"             # concept | insight | thought | law | pitfall | experience | typography | literature | governance
+      - "status"           # seedling | live | superseded | archived
+      - "scope"            # global | project:<name>
+      - "created"          # YYYY-MM-DD
+      - "last_reviewed"    # YYYY-MM-DD
+    optional_fields:
+      - "supersedes"       # [[旧卡]]
+      - "superseded_by"    # [[新卡]]
+      - "related"          # [[...], [[...]]
+      - "source"           # 原始来源（log / 文献 / 推导）
+      - "tags"             # []
+    schema_ref: "_Governance/schemas/card.yaml"
+  actor: "Author/Curator"
+  violation_level: "block"
+  enforcement:
+    - "kms_health.sh 扫描 frontmatter 完整性"
+    - "缺字段的卡在周报告红字标出"
+  friction_cost: "medium (首次建卡多 6 行；用模板可降至 low)"
+  mitigation:
+    - "提供 _Templates/概念卡模板.md（TODO）"
+
+# ----------------------------------------------------------------------------
+#  R03 — Memory 瘦身（双真相清零）
+# ----------------------------------------------------------------------------
+R03_memory_trim:
+  purpose: "Claude memory 回归其本职：行为规范 + 指针；不承载领域知识"
+  serves_goal: ["a"]
+  trigger:
+    - "宪法 v0.1 生效时（一次性迁移，见 migration_v0.1.md）"
+    - "后续任何新的 project_* 文件创建尝试（持续性禁令）"
+  action:
+    allowed_in_memory:
+      - "user_*"       # 用户偏好 / 背景
+      - "feedback_*"   # 协作规范
+      - "reference_*"  # 外部参考（API/工具版本）
+      - "pointer_*"    # 指向 vault 主卡的索引（新类型）
+    forbidden_in_memory:
+      - "project_*"    # 全部迁移到 vault
+      - "领域知识的正文叙述"
+    migration_spec: "_Governance/migration_v0.1.md"
+  actor: "Curator（提议）+ Arbiter（执行迁移）"
+  violation_level: "block"
+  enforcement:
+    - "kms_health.sh 扫描 memory/ 下 project_* 文件数，应为 0"
+  friction_cost: "high (一次性迁移成本)；low (后续维护)"
+
+# ----------------------------------------------------------------------------
+#  R04 — 升级仪式
+# ----------------------------------------------------------------------------
+R04_upgrade_ritual:
+  purpose: "log 中的定论按时固化为 evergreen 卡片，避免积压腐烂"
+  serves_goal: ["a", "b"]
+  trigger:
+    daily:
+      - "每日 log 末尾必须有 '升级候选' 区（可为空，但不得省略）"
+    weekly:
+      - "每周五 或 Arbiter 显式请求时"
+    event_driven:
+      - "Gate 状态变化（PASS / FAIL）"
+      - "重要假设被推翻"
+  action:
+    author_side:
+      - "每日写 log 时，把当日值得升级的结论列入 '升级候选' 区，附简短理由"
+    curator_side:
+      - "周度扫描最近 7 天 '升级候选'"
+      - "生成升级 PR：新卡草稿 + supersede 清单 + 挂接 MOC 建议"
+    arbiter_side:
+      - "Review PR → merge / reject / 要求修改"
+  sla:
+    upgrade_lag_target: "< 7 days from log to evergreen"
+    backlog_warning_threshold: 20  # 候选 > 20 条未处理即报警
+  actor: "Author / Curator / Arbiter 全链路"
+  violation_level: "warn"
+  enforcement:
+    - "kms_health.sh 统计升级队列长度"
+  friction_cost: "medium (每日 2 分钟 + 每周 15 分钟)"
+
+# ----------------------------------------------------------------------------
+#  R05 — 孤儿卡预防
+# ----------------------------------------------------------------------------
+R05_orphan_prevention:
+  purpose: "新卡必须接入知识网络，不成死岛"
+  serves_goal: ["b"]
+  trigger:
+    - "新卡创建后 72h 内未被任何 MOC 或其他卡引用"
+  action:
+    default_status: "seedling"
+    required_within_72h:
+      - "挂到至少 1 个 MOC（@索引-* 或 @项目*）"
+      - "或：挂到至少 1 张相关概念/洞察卡"
+    if_still_orphan_after_72h:
+      - "status 保持 seedling（不提升为 live）"
+      - "列入周报告 '待挂接' 列表"
+  exceptions:
+    - "type: experience / pitfall / typography —— 允许永久 seedling，不强制挂接"
+  actor: "Curator"
+  violation_level: "warn"
+  enforcement:
+    - "kms_health.sh 扫描孤儿卡 + 计算 72h 内的"
+  friction_cost: "low"
+  target_orphan_rate: "< 10% (当前 18.5%)"
+
+# ----------------------------------------------------------------------------
+#  R06 — 断链治理
+# ----------------------------------------------------------------------------
+R06_broken_link:
+  purpose: "断链率降到可接受范围，但不追求零"
+  serves_goal: ["b"]
+  trigger:
+    - "周度扫描"
+    - "任何新 PR 引入断链"
+  action:
+    classify_broken_links:
+      - "wish"     # 许愿链接（概念卡计划建但未建）→ 转 TODO 列表
+      - "typo"     # 笔误 / 路径错误 → Curator 直接修
+      - "moved"    # 目标卡改名/移动 → 批量替换
+      - "stale"    # 指向已 archive 的卡 → 保留（archive 不删）
+  actor: "Curator"
+  violation_level: "warn"
+  target_broken_rate: "< 5% (当前 27.7%)"
+  enforcement:
+    - "kms_health.sh 分类统计"
+
+# ----------------------------------------------------------------------------
+#  R07 — Narrative Spine 入 vault
+# ----------------------------------------------------------------------------
+R07_narrative_spine_in_vault:
+  purpose: "项目叙事骨架必须在 vault 可见，不得仅存 memory"
+  serves_goal: ["a", "b"]
+  trigger:
+    - "一次性执行（v0.1 迁移期）"
+    - "后续：任何新项目启动时必须同步建 narrative_spine"
+  action:
+    current_migration:
+      - "memory/project_narrative_spine.md → 迁移为 vault/02-Projects/冠层反射率分布照明角度归一化.md 的主叙事节"
+      - "memory 侧保留 pointer 指向 vault"
+    ongoing:
+      - "每个主项目在 02-Projects/ 有一个 MOC 文件，承载 narrative_spine"
+  actor: "Curator（迁移）+ Arbiter（merge）"
+  violation_level: "block"
+
+# ----------------------------------------------------------------------------
+#  R08 — 卡片生命周期治理
+# ----------------------------------------------------------------------------
+R08_lifecycle_governance:
+  purpose: "把 A1 生命周期公理落成机读状态机 + deprecation propagation 仪式"
+  serves_goal: ["a", "b"]
+
+  trigger:
+    - "任何 status 字段变更（含 authoritative bit 激活/撤销）"
+    - "任何 supersede / deprecate / retract / 删卡动作"
+    - "周度 kms_health 扫描"
+
+  # ---- 8.1 状态集合（扩为 6 值）----
+  status_values:
+    seedling:
+      meaning: "草稿，未经 Arbiter 复核；不得激活 authoritative bit"
+      allowed_targets: [live, archived]
+    live:
+      meaning: "已复核生效；核心概念主卡此时才能挂 authoritative: true"
+      allowed_targets: [superseded, deprecated, retracted, archived]
+    superseded:
+      meaning: "被新卡替代；frontmatter 必须有 superseded_by 指向新卡"
+      required_fields: [superseded_by, supersede_date]
+      allowed_targets: [archived]
+    deprecated:
+      meaning: "方向性废弃；无单一替代卡；保留追溯但不鼓励引用"
+      required_fields: [deprecation_reason, deprecation_date]
+      allowed_targets: [archived]
+    retracted:
+      meaning: "结论被证伪；警示性保留；不应被继承"
+      required_fields: [retraction_reason, retraction_date]
+      required_content: "正文首段必须有 RETRACTED banner（见 §8.4）"
+      allowed_targets: [archived]  # 通常不再转出
+    archived:
+      meaning: "冷存档；不再活跃维护；允许无 MOC 入链"
+      allowed_targets: []  # 终态
+
+  # ---- 8.2 状态转换权限 ----
+  transitions:
+    seedling_to_live:
+      actor: Arbiter
+      action: "刷 last_reviewed；核心概念主卡同时激活 authoritative: true"
+    live_to_superseded:
+      actor: Arbiter
+      prerequisite: "propagation 扫描完成（§8.3）"
+      action: "新卡 supersedes + 旧卡 superseded_by（双向一致）；MOC 改挂新卡"
+    live_to_deprecated:
+      actor: Arbiter
+      prerequisite: "propagation 扫描完成（§8.3）"
+      action: "写 deprecation_reason；MOC 保留但标灰"
+    live_to_retracted:
+      actor: Arbiter
+      prerequisite: "propagation 扫描完成（§8.3）"
+      action: "写 retraction_reason + banner；MOC 移入'历史教训'区"
+    any_to_archived:
+      actor: "Curator 提议 + Arbiter merge"
+      criterion: "deprecated/retracted ≥ 90 天未被引用，或主动归档"
+      action: "status:archived；可从活跃 MOC 移除"
+    any_to_deleted:
+      actor: "Arbiter only"
+      criterion: "罕见；默认 archive 而非 delete"
+      prerequisite:
+        - "propagation 扫描 100% 完成"
+        - "入链全部改挂或移除"
+        - "PR 描述列出扫描结果"
+
+  # ---- 8.3 Deprecation Propagation（核心纪律 / block 级）----
+  deprecation_propagation:
+    when: "live → superseded / deprecated / retracted / deleted 前必做"
+    steps:
+      - "step1_scan: grep -r \"[[<target_card_name>]]\" vault/ → 列出所有入链"
+      - "step2_classify:"
+      - "  - MOC 入链：必须更新（移除或改挂）"
+      - "  - 活卡正文引用：必须改挂到 SSOT 主卡或替代卡，禁止留空引用"
+      - "  - Journal / 00-Journal 历史 log：保留（append-only 策略，不追溯）"
+      - "  - Literature 卡（01-Literature）：改写段落或移除列表项"
+      - "  - Wish cards：若因此产生新 wish，同步登记 _Governance/todo_wish_cards.md"
+      - "step3_report: 在 PR 描述附 propagation 报告（扫描命令 + 分类结果 + 处理方案）"
+      - "step4_merge: Arbiter 检查报告后 merge"
+    violation_level: block
+    historical_lesson: "2026-04-24 Tier A→B 事件：删卡后下游 5 文件残留 6 条断链（commit 75e6ae0 → 45142f6 被动修复）"
+
+  # ---- 8.4 Retraction Banner 格式 ----
+  retraction_banner:
+    required_in: "status:retracted 卡的正文第一段"
+    template: |
+      > ⚠️ **RETRACTED** YYYY-MM-DD — 撤回原因：<一句话说明>
+      >
+      > 本卡结论已被证伪或推翻，保留仅供历史追溯。正确结论请见 [[替代卡 or 相关卡]]。
+    example_file: "03-Zettelkasten/踩坑-像元级p反演-RETRACTED.md"
+
+  # ---- 8.5 authoritative bit（与 R01 对齐）----
+  authoritative_bit:
+    applies_to: "project_<name>.yaml 的 core_concepts 列表中的概念主卡"
+    invariant: "同一概念同一 scope 下 authoritative:true 的卡有且仅有一张（与 R01 一致）"
+    activation:
+      trigger: "Arbiter 把 seedling 升 live"
+      actor: Arbiter
+    deactivation:
+      trigger: "supersede 时"
+      actor: Arbiter
+      constraint: "新卡激活 + 旧卡撤销必须同一 PR 完成（避免空窗期）"
+
+  # ---- 8.6 自动化指标 ----
+  health_metrics:
+    status_distribution:
+      live: "≥ 60% of total cards"
+      seedling: "≤ 30%"
+      "superseded + deprecated + retracted + archived": "≤ 10%"
+    retracted_banner_compliance: "100%（所有 status:retracted 卡必须有 banner）"
+    superseded_bidirectional: "100%（supersedes / superseded_by 双向一致）"
+    propagation_compliance: "100%（降级/删卡 PR 必须附 propagation 报告）"
+
+  # ---- 8.7 编辑深度矩阵（与 §8.2 状态转换权限互补）----
+  edit_depth_matrix:
+    purpose: "填补 §8.2 状态转换之外、日常单卡内容/结构编辑的权限边界"
+    naming_scheme: "动作对象命名（Arbiter 2026-04-24 批准方案 A）"
+    dimensions:
+      - identity: "canonical_name / aliases / authoritative"
+      - structure: "章节增删 / 拆卡 / 合卡 / tier / 目录"
+      - semantic: "## 定义 节实质内容"
+      - governance: "status 非活跃 / _Governance/"
+    tiers:
+      content_patch:
+        label_zh: "内容补丁"
+        emoji: "🟢"
+        judge: "不动身份、不改定义、不改 status"
+        trigger_verbs: ["补", "修", "加", "审"]
+        examples: ["typo", "补 related", "补推导细节", "加章节", "seedling 扩充", "last_reviewed 刷新", "修 wikilink 指向", "补 source/tags"]
+        actor: "Curator (AI) 直接执行"
+        violation_level: "track"
+      structure_refactor:
+        label_zh: "结构重构"
+        emoji: "🟡"
+        judge: "改身份或结构，但不改定义、不翻 authoritative、不降级 status"
+        trigger_verbs: ["拆", "合", "升级", "改名", "移"]
+        examples: ["拆卡", "合卡", "改 aliases", "改 canonical_name", "移目录/改 tier", "改 scope", "seedling → live"]
+        actor: "Arbiter 口头批 + Curator 执行"
+        protocol: "执行后出 before/after 摘要 + grep 入链报告"
+        violation_level: "warn"
+      definition_governance:
+        label_zh: "定义治理"
+        emoji: "🔴"
+        judge: "改定义 / 翻 authoritative / 降级 status / 改 _Governance/"
+        trigger_verbs: ["改定义", "翻", "废", "撤", "改 R"]
+        examples: ["定义重写（走 supersede）", "authoritative 翻转", "deprecate/retract/archive", "改 rules.yaml / @宪法.md / schemas/"]
+        actor: "Arbiter 亲为（PR + CHANGELOG 留痕）——不接受单句口头授权"
+        protocol:
+          - "AI 只起草 diff / supersede 方案 / proposal 草稿，禁止直接执行"
+          - "Arbiter 批准前必须完成三要素：a) 审阅目标卡定义/核心内容，b) grep 入链 + 影响评估，c) 书面明确判断"
+          - "三要素缺任一项 → AI 拒绝执行并提示缺失项"
+        violation_level: "block"
+        arbiter_decision_2026_04_24: "Q3 否决'Arbiter 在现场口头授权'方案；必须审阅内容+影响再判决"
+    tie_breaking:
+      rule: "一个动作同时涉及多档时，取最高档"
+      order: "definition_governance > structure_refactor > content_patch"
+      examples:
+        - "拆卡 + 改定义 → definition_governance（非 structure_refactor）"
+        - "补证据 + 改 canonical_name → structure_refactor（非 content_patch）"
+      approved_by: "Arbiter 2026-04-24"
+    bypass_trigger:
+      applies_to: ["structure_refactor"]
+      protocol:
+        structure_refactor: "Arbiter 口头批一次 + 会话内留痕；每次都需单独批，不存在 session 级免批"
+        definition_governance: "禁用口头授权；只允许 Arbiter 亲为 / PR + CHANGELOG 审批"
+      arbiter_decisions_2026_04_24:
+        Q2: "structure_refactor 每次口头批（否决 session 级授权）"
+        Q3: "definition_governance 禁用口头授权（Arbiter 必须审阅内容+影响再明确判断）"
+    historical_lesson:
+      wave1_2026_04_23: "Wave 1 批量 authoritative 活化采用单句'批准'口令。R08 §8.7 定稿（2026-04-24）后此模式废弃；Wave 1 作为过渡期先例保留记录，不追溯。"
+
+  actor: "Author/Curator（提议） + Arbiter（执行状态转换）"
+  violation_level: "block"
+  enforcement:
+    - "kms_health.sh 扫描 status 分布 + retracted banner + superseded 双向一致"
+    - "周报告列出违规点"
+  friction_cost: "low（转换仪式固定，Curator 可脚本化 propagation 扫描）"
+
+# ============================================================================
+#  元规则（关于规则自身）
+# ============================================================================
+
+meta_rules:
+  constitution_change:
+    trigger: "任何修改 _Governance/ 下文件"
+    action: "开 PR + diff + 理由 → Arbiter merge → CHANGELOG.md 追加条目"
+    actor: "Arbiter only"
+
+  quarterly_review:
+    trigger: "每季度末"
+    questions:
+      - "过去 90 天哪条规则被违反过？为什么？"
+      - "哪条规则从未触发？（删 / 修 / 保留）"
+      - "有'规则没覆盖'的新问题？（补规则）"
+    action: "更新 last_reviewed；必要时发起宪法变更 PR"
+
+  rule_count_cap:
+    hard_limit: 20
+    current: 7
+    action_if_exceeded: "砍或合并，不得新增"
+
+# ============================================================================
+#  违规等级定义
+# ============================================================================
+
+violation_levels:
+  block:
+    meaning: "CI 报警，建议拒绝 merge；Arbiter 决策是否强制放行"
+    examples: ["R01 核心概念裸定义", "R02 缺 YAML 字段", "R03 新建 project_*"]
+
+  warn:
+    meaning: "周报告列出，Curator 下一次仪式时处理"
+    examples: ["R04 升级队列积压 > 20", "R05 孤儿卡", "R06 断链"]
+
+  track:
+    meaning: "仅记录，不干预"
+    examples: []  # 目前无此级
