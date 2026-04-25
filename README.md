@@ -1,184 +1,192 @@
 # Muninn
 
-> *"Muninn（古诺斯语"记忆"）——北欧神话中 Odin 的两只乌鸦之一，每天飞遍世界带回消息。另一只叫 Huginn（思维）。"*
+[English](README.md) · [中文](README.zh.md)
 
-**一套"AI 时代的个人知识管理制度"** —— Obsidian vault 骨架 + 宪法 + 8 套 AI 协作工作流。
+> *"Muninn (Old Norse: 'memory') — one of Odin's two ravens, who flies the world every day and brings back what it sees. The other one, Huginn, is 'thought'."*
 
-## 为什么叫 Muninn
+**A constitution-driven personal knowledge management system for the AI era** — Obsidian vault skeleton, an explicit constitution, and 8 ready-to-paste AI collaboration workflows.
 
-乌鸦（Corvidae）是鸟类 IQ 之王：
-- **极高智商**：能识别抽象符号 / 解决多步工具问题
-- **惊人长期记忆**：能记住人脸数年
-- **工具使用者**：不仅用工具，还会**制作和保留工具** —— 精准对应本仓库的 `_Skills/` 工作流
-- **能和人协作**：日本奈良的乌鸦和人类协同觅食，分享信息
+## Why "Muninn"?
 
-这四点，正是 AI 时代个人知识系统该有的样子：**聪明、记得住、会用工具、会和人协作**。
+Corvids (the raven family) are the IQ champions of the bird world:
+- **High intelligence** — they recognize abstract symbols and solve multi-step tool problems
+- **Long-term memory** — they remember individual human faces for years
+- **Tool users** — they not only use tools, they **make and keep** tools — exactly what `_Skills/` workflows do
+- **Collaborate with humans** — Nara crows in Japan share information with people while foraging
 
-## 这是什么
+Those four traits are what a personal knowledge system in the AI era should look like:
+**smart, persistent, equipped with reusable tools, and able to work with humans.**
 
-一个公开的模板仓库，帮你 5 分钟起一个符合以下原则的 Obsidian 知识库：
+## What this is
 
-1. **SSOT（Single Source of Truth）**：核心概念只在一处有权威定义
-2. **Arbiter-Executor 边界**：你是决策者，AI 是执行者，有明确制度防 AI 瞎改
-3. **生命周期管理**：卡片有 seedling / live / archived / superseded 状态流转
-4. **健康度仪表盘**：周度脚本扫描孤儿率 / 断链率 / frontmatter 覆盖等 8 项指标
+A public template repository that lets you spin up a working Obsidian KMS in 5 minutes, with the following properties built in:
 
-## 三档 Profile
+1. **SSOT (Single Source of Truth)** — every core concept has exactly one authoritative card
+2. **Arbiter–Executor boundary** — you decide; AI executes; explicit rules prevent AI from rewriting your definitions
+3. **Lifecycle management** — every card carries `seedling / live / archived / superseded` state
+4. **Health dashboard** — a weekly script reports orphans, broken links, frontmatter coverage, etc. (8 metrics, R01–R08)
 
-| Profile | 状态 | 适合谁 |
+## Three profiles
+
+| Profile | Status | For whom |
 |---|---|---|
-| **research** | ✅ 稳定 | 博士生 / 研究员 / 学术工作者 |
-| **product** | 🟡 WIP | 产品经理 / 设计师 / 创业者 |
-| **engineering** | 🟡 WIP | 软件工程师 / 架构师 / SRE |
+| **research** | ✅ stable | PhD students / researchers / academics |
+| **product** | 🟡 WIP | PMs / designers / founders |
+| **engineering** | 🟡 WIP | software engineers / architects / SREs |
 
-详见 [docs/profile-comparison.md](docs/profile-comparison.md)。
+Details: [docs/profile-comparison.md](docs/profile-comparison.md).
 
-## 快速开始（5 分钟）
+## Quick start (5 minutes)
 
 ```bash
-# 1. clone
-git clone https://github.com/<yourname>/muninn.git
+# 1. Clone
+git clone https://github.com/Flemyng1999/muninn.git
 cd muninn
 
-# 2. 生成你的 vault（选一个 profile）
+# 2. Generate your vault (pick a profile)
 bash scripts/bootstrap.sh --profile research --out ~/my-vault
 
-# 3. 打开 Obsidian → Open folder as vault → 选 ~/my-vault
+# 3. Open Obsidian → Open folder as vault → choose ~/my-vault
 
-# 4. 读 ~/my-vault/README.md 按指引上手
+# 4. Read ~/my-vault/README.md and follow the 3-day onboarding
 ```
 
-完整新手指南见 [QUICKSTART.md](QUICKSTART.md)。
+Full new-user guide: [QUICKSTART.md](QUICKSTART.md).
 
-## 仓库结构
+## Repository layout
 
 ```
 muninn/
-├── core/                         # 80% 通用骨架
-│   ├── _Governance/              # 宪法 + rules + schemas
-│   ├── _Skills/                  # 7 套通用工作流（早间/晚间/流水/会议/卡片/AI接入/交接）
-│   ├── scripts/                  # kms_health.sh + backfill_yaml.py
+├── core/                         # 80% generic skeleton
+│   ├── _Governance/              # constitution + rules + schemas
+│   ├── _Skills/                  # 7 generic AI workflows (morning kickoff, evening wrap-up, ...)
+│   ├── scripts/                  # profile-driven health dashboard
 │   └── _Concepts / 00-Journal / 02-Projects / 03-Zettelkasten / .obsidian
+│
 ├── profiles/
-│   ├── research/                 # 研究者 profile（完整）
-│   ├── product/                  # 产品人 profile（WIP，欢迎 PR）
-│   └── engineering/              # 工程师 profile（WIP，欢迎 PR）
+│   ├── research/                 # complete (literature workflow + experiment/gate schemas)
+│   ├── product/                  # WIP — contributions welcome
+│   └── engineering/              # WIP — contributions welcome
+│
 ├── docs/
-│   ├── philosophy.md             # 为什么这样设计
-│   ├── profile-comparison.md     # profile 对比
-│   ├── repo-vault-interface.md   # repo ↔ vault 接口契约模板
-│   ├── agent-onboarding.md       # 项目入口文件实践（10 项内容契约）
-│   └── known-issues.md           # 已知问题与技术债务清单
-├── examples/                     # 示例（3 套）
-│   ├── research-full/            # 完整研究示例：城市乌鸦工具使用演化
-│   ├── product-teaser/           # 产品 teaser：决策卡 + 用户画像
-│   └── engineering-teaser/       # 工程 teaser：ADR + 故障复盘
-└── scripts/
-    └── bootstrap.sh              # core + profile overlay 工具
+│   ├── philosophy.md             # why this design
+│   ├── profile-comparison.md     # research vs product vs engineering
+│   ├── repo-vault-interface.md   # repo ↔ vault contract template
+│   ├── agent-onboarding.md       # entry-file content contract (CLAUDE.md / AGENTS.md / ...)
+│   └── known-issues.md           # debt log
+│
+├── examples/                     # 3 worked examples (28 files)
+│   ├── research-full/            # complete fictional research project
+│   ├── product-teaser/           # decision card + persona + North Star
+│   └── engineering-teaser/       # ADR + postmortem + consistency boundary
+│
+└── scripts/bootstrap.sh          # core + profile overlay tool
 ```
 
-## 核心特性
+## Core features
 
-### 1. 宪法 + R01–R08 八条硬规则
+### 1. Constitution + R01–R08 hard rules
 
-- **R01 SSOT**：核心概念只在主卡定义
-- **R02 Frontmatter 覆盖率** ≥ 95%
-- **R03 Memory 瘦身**：AI memory 不囤 project_* 原件
-- **R04 Narrative spine**：项目 MOC 是叙事骨架
-- **R05 孤儿率** = 0
-- **R06 断链率** < 10%
-- **R07 升级队列**：seedling → live 有流程
-- **R08 生命周期 + 编辑深度矩阵**：🟢 / 🟡 / 🔴 三档，🔴 要 Q3 三要素授权
+- **R01 SSOT** — core concepts only defined in master cards
+- **R02 frontmatter coverage** ≥ 95%
+- **R03 memory hygiene** — AI auto-memory does not hoard `project_*` originals
+- **R04 narrative spine** — each project has one MOC
+- **R05 orphan rate** = 0
+- **R06 broken-link rate** < 10% (raw) / < 5% (actionable)
+- **R07 upgrade queue** — `seedling → live` is a process
+- **R08 lifecycle + edit-depth matrix** — three tiers; the deepest tier requires Q3 three-element approval
 
-### 2. R08 §8.7 编辑深度矩阵
+### 2. R08 §8.7 edit-depth matrix
 
-AI 改卡时按动词判档：
+When AI is asked to modify a card, classify by verb:
 
-| 档 | 触发动词 | AI 行为 |
+| Tier | Trigger verbs | AI behavior |
 |---|---|---|
-| 🟢 content_patch | 补 / 修 / 加 / 审 | 直接改，报 diff |
-| 🟡 structure_refactor | 拆 / 合 / 升级 / 改名 / 移 | Arbiter 口头批，执行 + grep 入链报告 |
-| 🔴 definition_governance | 改定义 / 翻 / 废 / 撤 / 改规则 | **只起草**，等 Q3 三要素书面批准 |
+| 🟢 content_patch | append / fix / add / review | edit directly, report diff |
+| 🟡 structure_refactor | split / merge / promote / rename / move | Arbiter approves once, then execute + provide grep impact report |
+| 🔴 definition_governance | change definition / flip / deprecate / retract / change rules | **draft only**, wait for Q3 three-element written approval |
 
-Q3 三要素：(a) Arbiter 审阅 (b) grep 入链评估 (c) 书面明确判断。
+Q3 three-element: (a) Arbiter has read it (b) impact assessed via grep (c) explicit written judgment (not just "OK").
 
-### 3. 8 套 AI 工作流（开箱即用）
+### 3. Eight ready-to-paste AI workflows
 
-| 工作流 | 场景 |
+| Workflow | Trigger |
 |---|---|
-| 工作流-早间启动-条件Git | 开工启动 + 昨日承接 |
-| 工作流-晚间结项-Git闭环 | 日结 + AI 挑沉淀点 |
-| 工作流-流水记录-分流沉淀 | Inbox 分流 |
-| 工作流-会议沉淀-规范落库 | 开完会落卡 |
-| 工作流-KMS-卡片起草与维护 | 起 seedling / 修断链 |
-| 工作流-AI接入KMS | 把外部 AI（非 Claude Code）拉进 KMS |
-| 工作流-KMS交接他人 | 把系统传给下一个人 |
-| 工作流-文献沉淀-规范落库 | （research profile）读完论文落卡 |
+| Morning kickoff (conditional Git) | start of day |
+| Evening wrap-up (Git close-out) | end of day, AI picks promotion candidates |
+| Inbox triage / sorting | clearing daily inbox |
+| Meeting capture | after a meeting |
+| Card draft + maintenance | new card / orphan rescue / broken-link fixes |
+| AI onboarding to KMS | bringing an external AI (ChatGPT / Gemini / Claude.ai) into the vault |
+| KMS handoff | passing the system to another person |
+| Literature capture | after reading a paper *(research profile)* |
 
-每套都是成对的：**说明页**（.md）+ **正式提示词**（-正式提示词.md，直接粘给 AI）。
+Each workflow comes as a **pair**: an explainer (`.md`) and a paste-into-AI prompt (`-正式提示词.md`).
 
-### 4. 健康度仪表盘
+### 4. Health dashboard
 
 ```bash
-bash scripts/kms_health.sh            # 输出 markdown 报告
-bash scripts/kms_health.sh --save     # 保存到 out/kms_health/YYYY-MM-DD.md
+export KMS_PROJECT_PROFILE="$HOME/my-vault/_Governance/project_<id>.yaml"
+bash scripts/kms_health.sh                    # markdown report to stdout
+bash scripts/kms_health.sh --save             # also save to <repo>/out/kms_health/<date>.md
+python scripts/kms_r06_classify.py --verbose  # deep dive on broken links
 ```
 
-周度跑一次，看 R02/R05/R06 等 8 项绿不绿。
+Run weekly. The pass line: R02 ≥ 95% / R05 = 0 / R06-actionable < 5%.
 
-## 谁应该（不）用
+## Who should (or shouldn't) use this
 
-### 适合你 ✅
+### A good fit ✅
 
-- 做研究 / 产品 / 工程，每周有 ≥ 5 次值得沉淀的信息点
-- 想用 AI 协作但吃过 AI 乱改笔记的亏
-- 愿意花 1 小时读宪法换未来 3 年的结构化沉淀
+- You do research / product / engineering, with at least 5 worth-recording info points per week
+- You collaborate with AI and have been bitten by AI rewriting your notes
+- You're willing to spend 1 hour reading the constitution in exchange for 3 years of structured records
 
-### 别用 ❌
+### Not a good fit ❌
 
-- 你的工作不需要跨月度沉淀
-- 你还没养成定期写日记/周报的习惯 → 先用 Notion 养 3 个月
-- 你不打算和 AI 协作 → Muninn 的一半价值消失
-- 你只想做玩具知识图谱 → Logseq / Roam 更适合
+- Your work doesn't need cross-month accumulation
+- You haven't yet built a habit of writing daily / weekly notes — start with Notion for 3 months first
+- You don't intend to collaborate with AI — half of Muninn's value disappears
+- You only want a knowledge-graph toy — Logseq or Roam is closer
 
-## 设计哲学
+## Design philosophy
 
-详见 [docs/philosophy.md](docs/philosophy.md)。三个核心原则：
+See [docs/philosophy.md](docs/philosophy.md). Three principles:
 
-1. **SSOT** —— 核心定义只在一处
-2. **Arbiter-Executor 角色边界** —— AI 有明确制度限制
-3. **三层分离** —— 宪法 / 工作流 / 数据各自独立演化
+1. **SSOT** — core definitions in exactly one place
+2. **Arbiter–Executor boundary** — AI is bound by explicit institutional rules
+3. **Three-layer separation** — constitution / workflows / data evolve independently
 
-## 关键文档
+## Key documents
 
-| 文档 | 用途 |
+| Document | Purpose |
 |---|---|
-| [docs/philosophy.md](docs/philosophy.md) | 设计哲学 / 为什么这样做 |
-| [docs/profile-comparison.md](docs/profile-comparison.md) | research / product / engineering profile 对比 |
-| [docs/repo-vault-interface.md](docs/repo-vault-interface.md) | 项目仓库 ↔ vault 接口契约模板 |
-| [docs/agent-onboarding.md](docs/agent-onboarding.md) | 入口文件（CLAUDE.md / AGENTS.md / ...）必含字段契约 |
-| [docs/known-issues.md](docs/known-issues.md) | 已知问题与技术债务清单 |
-| [QUICKSTART.md](QUICKSTART.md) | 5 分钟起步 |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | 贡献新 profile / 工作流 / schema 扩展 |
+| [docs/philosophy.md](docs/philosophy.md) | Why this design |
+| [docs/profile-comparison.md](docs/profile-comparison.md) | research vs product vs engineering |
+| [docs/repo-vault-interface.md](docs/repo-vault-interface.md) | Project repo ↔ vault contract template |
+| [docs/agent-onboarding.md](docs/agent-onboarding.md) | Required content for entry files (CLAUDE.md / AGENTS.md / ...) |
+| [docs/known-issues.md](docs/known-issues.md) | Debt log |
+| [QUICKSTART.md](QUICKSTART.md) | 5-minute starting guide |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Adding profiles / workflows / schema extensions |
 
-## 贡献
+## Contributing
 
-- **新 profile**：`profiles/<name>/`，参考 `profiles/research/` 结构，PR welcome
-- **新工作流**：`core/_Skills/02-Workflows/<工作流-场景-目标>.md` + 配对的 `-正式提示词.md`
-- **宪法改进**：`core/_Governance/proposals/` 起 proposal，不直接改 `@宪法.md` / `rules.yaml`
+- **New profile** — `profiles/<name>/`; see `profiles/research/` as the reference; PRs welcome
+- **New workflow** — `core/_Skills/02-Workflows/<workflow-scenario-goal>.md` plus its paired `-正式提示词.md`
+- **Constitution change** — open a proposal under `core/_Governance/proposals/`; do not patch `@宪法.md` / `rules.yaml` directly
 
-详见 [CONTRIBUTING.md](CONTRIBUTING.md)。
+Details: [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## 许可
+## License
 
-MIT。宪法文本、工作流、脚本、schema 均可自由修改、商用、再发布。
+MIT. The constitution text, workflows, scripts, and schemas can all be modified, used commercially, and redistributed.
 
-## 致谢
+## Acknowledgments
 
-- 北欧神话给了这个项目的名字
-- Obsidian 给了这个项目的载体
-- 研究工作中无数次被 AI 乱改笔记的崩溃给了这个项目的动机
+- Norse mythology gave this project its name
+- Obsidian gives this project its substrate
+- Many session-disasters of "AI rewriting my notes" gave this project its motivation
 
-## 联系
+## Contact
 
-Issue / PR 欢迎。商业咨询、定制 profile、团队版请 open issue 联系。
+Issues / PRs welcome. For commercial inquiries, custom profiles, or team editions, please open an issue.
