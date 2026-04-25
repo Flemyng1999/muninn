@@ -1,125 +1,144 @@
-# Muninn 快速上手（5 分钟）
+# Muninn Quickstart (5 minutes)
 
-## 假设你是谁
+[English](QUICKSTART.md) · [中文](QUICKSTART.zh.md)
 
-- 你在做研究 / 产品 / 工程，需要结构化沉淀
-- 你用过 AI 协作，吃过 AI 乱改笔记的亏
-- 你愿意花 1 小时换未来几年的秩序
+## Who is this for
 
-不满足任一条 → 先不用，去 [docs/philosophy.md](docs/philosophy.md) §七 看"什么情况下别用"。
+- You do research / product / engineering and need structured long-term notes
+- You collaborate with AI and have been bitten by AI rewriting your notes
+- You're willing to spend 1 hour now in exchange for years of orderly knowledge
 
-## Step 0：装 Obsidian（5 分钟，一次性）
+If any of these don't fit you — start by reading [docs/philosophy.md](docs/philosophy.md) §"When not to use this" first.
 
-https://obsidian.md → 下载对应系统 → 安装。
+## Step 0: Install Obsidian (5 min, one-time)
 
-## Step 1：clone 这个仓库（1 分钟）
+Download from <https://obsidian.md> and install for your OS.
+
+## Step 1: Clone this repo (1 min)
 
 ```bash
-git clone https://github.com/<yourname>/muninn.git
+git clone https://github.com/Flemyng1999/muninn.git
 cd muninn
 ```
 
-## Step 2：生成你的 vault（1 分钟）
+## Step 2: Generate your vault (1 min)
 
 ```bash
-# 研究者
+# Researcher
 bash scripts/bootstrap.sh --profile research --out ~/my-vault
 
-# 纯骨架（产品 / 工程 profile 还 WIP，先用 core-only）
+# Bare skeleton (product / engineering profiles are still WIP — use core only)
 bash scripts/bootstrap.sh --profile none --out ~/my-vault
 ```
 
-## Step 3：Obsidian 打开（2 分钟）
+## Step 3: Open in Obsidian (2 min)
 
-1. 打开 Obsidian
-2. 左下 "Open another vault" → "Open folder as vault"
-3. 选 `~/my-vault/`
-4. 左侧看到 `_Governance / _Skills / _Concepts / 00-Journal / 03-Zettelkasten / README.md`
+1. Launch Obsidian
+2. Bottom-left → "Open another vault" → "Open folder as vault"
+3. Select `~/my-vault/`
+4. The left pane should show: `_Governance / _Skills / _Concepts / 00-Journal / 03-Zettelkasten / README.md`
 
-## Step 4：装 4 个 Obsidian 插件（10 分钟）
+## Step 4: Install 4 Obsidian plugins (10 min)
 
-左下齿轮 → Community plugins → Turn on → Browse，依次装：
-- **Templater**（必需）
-- **Dataview**（必需）
-- **Obsidian Git**（强推）
-- **Kanban**（可选）
+Bottom-left gear → Community plugins → Turn on → Browse, install in order:
 
-装完重启 Obsidian。
+- **Templater** (required)
+- **Dataview** (required)
+- **Obsidian Git** (strongly recommended)
+- **Kanban** (optional)
 
-## Step 5：填健康检查脚本的占位（5 分钟，一次性）
+Restart Obsidian after installing.
 
-打开 `~/my-vault/scripts/kms_health.sh`，改顶部 3 个路径占位：
+## Step 5: Set the project profile path (5 min, one-time)
+
+Muninn tools are *profile-driven*. You don't edit any script — you set one environment variable:
 
 ```bash
-VAULT="<VAULT_ABSOLUTE_PATH>"          # → 改成 /Users/你/my-vault（绝对路径）
-MEM="<CLAUDE_MEMORY_PATH_OR_EMPTY>"    # → 不用 Claude Code 填空字符串 ""
-REPO="<PROJECT_REPO_PATH>"             # → 你的项目 git 仓库路径，没有填 /tmp/kms-out
+export KMS_PROJECT_PROFILE="$HOME/my-vault/_Governance/project_<your_id>.yaml"
 ```
 
-`scripts/backfill_yaml.py` 同样填两个占位。
+If you haven't created the profile yet, copy the template:
 
-详见 `~/my-vault/scripts/README.md`。
+```bash
+cp ~/my-vault/_Governance/project_TEMPLATE.yaml ~/my-vault/_Governance/project_<your_id>.yaml
+```
 
-## Step 6：读必读 4 份文件（30 分钟）
+Edit the new file. The minimum required fields:
 
-按顺序打开读一遍，不必全记：
+```yaml
+meta:
+  project_id: "<your_id>"
+  vault_path: "<absolute path of ~/my-vault>"
+```
 
-1. `~/my-vault/README.md`（顶层）
-2. `_Governance/@宪法.md` 重点 §三 角色 / §六 规则速览 / §R08 §8.7
-3. `_Skills/02-Workflows/@工作流索引.md`（知道 8 套工作流都在哪）
-4. `_Concepts/README.md` + `03-Zettelkasten/README.md`（知道什么放哪）
+All other fields fall back to defaults defined in [`schemas/project_profile.yaml`](core/_Governance/schemas/project_profile.yaml).
 
-## Step 7：跑一遍"AI 接入"流程（10 分钟）
+For the full field reference, see `_Governance/schemas/project_profile.yaml` after Step 2.
 
-1. 打开一个 AI（ChatGPT / Claude.ai / Gemini）新会话
-2. 打开 `_Skills/02-Workflows/工作流-AI接入KMS-正式提示词.md`
-3. 复制 `---PROMPT START---` 到 `---PROMPT END---` 的全部内容，粘给 AI
-4. AI 会要求你贴几份关键文件（宪法 / rules / schemas），按它要求贴
-5. AI 答验收清单 5 条，通过 → 你的第一次 AI 协作通道建立
+## Step 6: Read the 4 essential docs (30 min)
 
-## Step 8：开始日常（Day 1 开始）
+Open these in order in Obsidian:
 
-参考 `_Skills/02-Workflows/工作流-早间启动-条件Git-正式提示词.md`，每天走一遍：
+1. `~/my-vault/README.md` (top level)
+2. `_Governance/@宪法.md` — focus on §三 (roles), §六 (rule overview), §R08 §8.7 (edit-depth matrix)
+3. `_Skills/02-Workflows/@工作流索引.md` — locate the 8 workflows
+4. `_Concepts/README.md` + `03-Zettelkasten/README.md` — what goes where
 
-- **早上**：建 Journal + 今天 2–3 任务
-- **白天**：遇事 `[HH:MM] 事件`，涉及核心概念用 `[[双链]]`
-- **晚上**：AI 过一遍 Journal，挑沉淀点
+## Step 7: Run the AI onboarding flow (10 min)
 
-## Day 14 验收
+1. Open a fresh AI session (ChatGPT / Claude.ai / Gemini)
+2. Open `_Skills/02-Workflows/工作流-AI接入KMS-正式提示词.md`
+3. Copy everything between `---PROMPT START---` and `---PROMPT END---`, paste into the AI
+4. The AI will ask you to paste a few governance files; do so in order
+5. The AI must answer the 5-item acceptance checklist correctly — once it does, your first AI collaboration channel is established
+
+## Step 8: Start daily usage (Day 1 onwards)
+
+See `_Skills/02-Workflows/工作流-早间启动-条件Git-正式提示词.md` for the morning kickoff flow:
+
+- **Morning**: create today's Journal + 2–3 core tasks
+- **During the day**: log events with `[HH:MM]` timestamps; cite core concepts via `[[wiki-link]]`
+- **Evening**: feed today's Journal to AI, let it surface promotion candidates
+
+## Day 14: Acceptance check
 
 ```bash
 cd ~/my-vault
-bash scripts/kms_health.sh
+bash scripts/kms_health.sh --verbose
 ```
 
-- R02 frontmatter 覆盖率 ≥ 95%
-- R05 孤儿卡 = 0
-- R06 断链率 < 10%
-- `00-Journal/` ≥ 10 文件，每条 `[HH:MM]` 时间戳
-- `_Concepts/概念-*.md` 3–10 张 seedling
+Pass conditions:
 
-全中 → 毕业，独立运转。
+- R02 frontmatter coverage ≥ 95%
+- R05 orphan rate = 0
+- R06 actionable broken-link rate < 5%
+- `00-Journal/` has ≥ 10 files, every entry has an `[HH:MM]` prefix
+- `_Concepts/概念-*.md` contains 3–10 seedling master cards
 
-## 我应该选哪个 Profile？
+All pass → graduated; you can run independently.
 
-| 你是 | 选 |
+## Which profile should I pick?
+
+| You are | Pick |
 |---|---|
-| 博士生 / 研究员 | `--profile research` |
-| 产品 / 设计 / 创业 | `--profile none`（等 product profile 成熟） |
-| 工程师 / 架构师 | `--profile none`（等 engineering profile 成熟） |
-| 不确定 | `--profile none`，两周后你会知道 |
+| PhD student / researcher | `--profile research` |
+| Product / design / founder | `--profile none` (wait for the product profile to mature) |
+| Software engineer / architect | `--profile none` (wait for the engineering profile) |
+| Not sure yet | `--profile none` — you'll know after two weeks |
 
-详见 [docs/profile-comparison.md](docs/profile-comparison.md)。
+Details: [docs/profile-comparison.md](docs/profile-comparison.md).
 
-## 遇到问题
+## Common issues
 
-- AI 自称改了 `_Governance/` → 不信，让它重读 `工作流-AI接入KMS-正式提示词.md`
-- 脚本跑不起来 → `scripts/README.md` 末尾有"常见报错"
-- 想改宪法 → 先用满 2 个月再说。90% 的"想改规则"其实是"没理解"
-- 不想用了 → 所有文件是标准 Markdown，无 lock-in，直接关 Obsidian 就行
+- **AI claims it edited `_Governance/`** — don't believe it. Re-paste the AI onboarding prompt and start over.
+- **Scripts won't run** — the bottom of `scripts/README.md` lists common errors.
+- **Wanting to change the constitution** — wait at least 2 months first. 90% of "I want to change the rules" turns out to be "I haven't fully understood them yet".
+- **Want to stop using it** — your files are plain Markdown with no lock-in. Just close Obsidian.
 
-## 下一步
+## Next steps
 
-- 深度理解：[docs/philosophy.md](docs/philosophy.md)
-- 对比 profile：[docs/profile-comparison.md](docs/profile-comparison.md)
-- 贡献 profile / 工作流：[CONTRIBUTING.md](CONTRIBUTING.md)
+- Deeper understanding: [docs/philosophy.md](docs/philosophy.md)
+- Compare profiles: [docs/profile-comparison.md](docs/profile-comparison.md)
+- Project ↔ vault contract: [docs/repo-vault-interface.md](docs/repo-vault-interface.md)
+- AI entry-file content contract: [docs/agent-onboarding.md](docs/agent-onboarding.md)
+- Contribute a profile / workflow: [CONTRIBUTING.md](CONTRIBUTING.md)
