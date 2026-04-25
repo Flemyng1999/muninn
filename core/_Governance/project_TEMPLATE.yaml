@@ -1,39 +1,65 @@
 # ============================================================================
 #  project_<YOUR_PROJECT>.yaml — 按本模板复制一份，改名为你自己的项目
+#  Schema：见 _Governance/schemas/project_profile.yaml (v1.0)
 #  修改权限：Arbiter（你）
 # ============================================================================
 
 meta:
-  project_id: "<YOUR_PROJECT>"
+  project_id: "<YOUR_PROJECT>"               # 必填，snake-case 或 kebab-case
   project_name_zh: "<中文名>"
   project_name_en: "<English Name>"
   version: "0.1.0"
   created: "YYYY-MM-DD"
   last_reviewed: "YYYY-MM-DD"
+  vault_path: "<VAULT_ABSOLUTE_PATH>"        # 必填：Obsidian vault 绝对路径
+  repo_path: "<PROJECT_REPO_ABSOLUTE_PATH>"  # 可选：项目代码仓库
+  memory_path: ""                            # 可选：Claude Code auto-memory 路径，不用填空字符串
   scope_under_constitution: "<YOUR_PROJECT> + L0/L1"
-  repo_path: "<项目仓库绝对路径>"
-  memory_path: "<AI memory 绝对路径，可选>"
 
-core_concepts:
-  # 列 5–10 张跨文档被反复引用的核心概念，它们会被 R01 保护必须在 _Concepts/ 独一主卡
-  # - name: "<术语>"
-  #   aliases: ["<别名1>", "<别名2>"]
-  #   master_card: "概念-<术语>"
-  #   tier: "L1"            # L1=通用 / L2=本项目特有
-  #   scope: "global"       # global / project:<YOUR_PROJECT>
-
-gate_status:
-  source_of_truth: "PROJECT.md"
-  snapshot_date: "YYYY-MM-DD"
-  gates:
-    # gate_0_<name>: "TODO"
-
+# ----------------------------------------------------------------------------
+#  paths 全部 vault-relative（相对 meta.vault_path）
+#  缺省字段使用 schema 默认值，无需写
+# ----------------------------------------------------------------------------
 paths:
-  narrative_spine: "02-Projects/<项目中文名>.md"
-  daily_log_dir: "log/"
-  obsidian_log_dir: "00-Journal/"
   concept_cards_dir: "_Concepts/"
+  draft_cards_dir: "03-Zettelkasten/"
+  obsidian_log_dir: "00-Journal/"
+  narrative_spine: "02-Projects/<项目中文名>.md"
   concept_cards_glob: "_Concepts/概念-*.md"
   domain_moc_glob: "_Concepts/@索引-*.md"
   insight_cards_glob: "03-Zettelkasten/洞察-*.md"
-  draft_cards_dir: "03-Zettelkasten/"
+  # literature_dir: "01-Literature/"        # research profile 才需要
+
+# ----------------------------------------------------------------------------
+#  R01 保护对象：跨文档反复引用的核心术语（5–10 张为宜）
+# ----------------------------------------------------------------------------
+core_concepts:
+  # - name: "<术语>"
+  #   aliases: ["<别名1>", "<别名2>"]
+  #   master_card: "概念-<术语>"
+  #   tier: "L1"                  # L0=方法学通用 / L1=领域通用 / L2=项目特有
+  #   scope: "global"             # global 或 project:<YOUR_PROJECT>
+
+# ----------------------------------------------------------------------------
+#  Gate 判据机读快照（PROJECT.md 是 source of truth；本节是镜像）
+# ----------------------------------------------------------------------------
+gate_status:
+  source_of_truth: "PROJECT.md"
+  snapshot_date: "YYYY-MM-DD"
+  gates: {}
+    # gate_0_<name>: "TODO"   # TODO / IN_PROGRESS / PASS / FAIL
+
+# ----------------------------------------------------------------------------
+#  health 配置（全部可选，覆盖 schema 默认值）
+#  详见 _Governance/schemas/project_profile.yaml 的 health 节
+# ----------------------------------------------------------------------------
+# health:
+#   r06:
+#     historical_window_days: 30
+#     placeholder_keywords: ["对应的", "某个", "your_project", "xxx"]
+
+# ----------------------------------------------------------------------------
+#  extras：自定义字段（Muninn 工具不读）
+# ----------------------------------------------------------------------------
+# extras:
+#   <your_field>: <your_value>

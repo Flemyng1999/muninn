@@ -14,9 +14,9 @@ Arbiter 说了算，AI 是 Executor。这是骨架，不是内容。
 
 ### Day 2（配项目）
 1. 复制 `_Governance/project_TEMPLATE.yaml` → `project_<你的项目>.yaml`
-2. 填 `meta` 字段（项目名、仓库路径、日期）
+2. 至少填两个必填字段：`meta.project_id` 和 `meta.vault_path`
 3. 在 `core_concepts` 列 5–10 张主卡名（跨文档被反复引用的核心术语）
-4. 占位 `gate_status`（可先全写 "TODO"）
+4. 完整 schema 见 `_Governance/schemas/project_profile.yaml`
 
 ### Day 3（建骨架）
 1. 在 `_Concepts/` 建你列的前 3 张主卡（文件名：`概念-<术语>.md`）
@@ -24,15 +24,22 @@ Arbiter 说了算，AI 是 Executor。这是骨架，不是内容。
 3. 正文不必完美，至少有 `## 定义` + 一条参考文献
 
 ### Day 5（第一次体检）
-1. 从源项目复制 `scripts/kms_health.sh` 到你的项目仓库
-2. 改顶部 `VAULT` / `REPO` 路径常量到你自己的
-3. `bash scripts/kms_health.sh`
-4. R02 ≥ 95% / R05 = 0 → 通过
+脚本是 profile-driven 的，**不需要改任何路径占位**。设置环境变量后即可：
+
+```bash
+export KMS_PROJECT_PROFILE="$(pwd)/_Governance/project_<你的项目>.yaml"
+bash scripts/kms_health.sh --verbose
+```
+
+或每次显式传：
+```bash
+bash scripts/kms_health.sh --profile $(pwd)/_Governance/project_<你的项目>.yaml
+```
+
+通过：R02 ≥ 95% / R05 = 0 / R06-actionable < 5%
 
 ### Day 14（独立）
-1. 再跑 `kms_health.sh`
-2. R02 ≥ 95% + R05 = 0 + R06 < 10% → 可独立
-3. 不过 → 回 Day 3 重建骨架
+再跑 `kms_health.sh`，三项达成 → 可独立。不过 → 回 Day 3 重建骨架。
 
 ---
 

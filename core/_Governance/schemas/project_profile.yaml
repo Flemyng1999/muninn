@@ -1,0 +1,283 @@
+# ============================================================================
+#  Muninn Project Profile Schema (v1)
+#
+#  目的：定义 project_<id>.yaml 的字段契约。所有 Muninn 工具（kms_health.sh /
+#  kms_r06_classify.py / bootstrap.sh / 未来的 dashboard）均**只**通过 profile
+#  读取项目特定数据，禁止在脚本内硬编码项目名 / 路径 / 阈值。
+#
+#  Profile 文件位置：<VAULT>/_Governance/project_<id>.yaml
+#  Profile 文件路径派生：VAULT = profile_path.parent.parent
+#
+#  约束：
+#    - 工具读取 profile 必须容忍**缺失字段**：用本 schema 的 default 值
+#    - 工具不得读取**未定义在本 schema 的字段**（除非起 v2 schema proposal）
+#    - 项目自定义扩展字段统一放 `extras:` 节，工具不读
+#
+#  v1 → v2 升级路径（未来）：起 _Governance/proposals/ 走 Q3 三要素
+# ============================================================================
+
+schema_version: "1.0"
+schema_owner: "Muninn core"
+last_modified: "2026-04-25"
+
+# ----------------------------------------------------------------------------
+#  REQUIRED 顶层节
+# ----------------------------------------------------------------------------
+
+required_sections:
+  - meta
+  - paths
+  # core_concepts 不是 required（项目可能尚未建主卡）
+  # gate_status / health 全部 optional
+
+# ----------------------------------------------------------------------------
+#  FIELDS（字段类型 + 默认值 + 描述）
+# ----------------------------------------------------------------------------
+
+sections:
+
+  meta:
+    required: true
+    fields:
+      project_id:
+        type: string
+        required: true
+        format: "snake-case-or-kebab-case"
+        example: "urban-crow-toolevo"
+
+      project_name_zh:
+        type: string
+        required: false
+
+      project_name_en:
+        type: string
+        required: false
+
+      version:
+        type: string
+        required: false
+        format: "semver"
+        example: "0.2.1"
+
+      created:
+        type: date
+        required: false
+        format: "YYYY-MM-DD"
+
+      last_reviewed:
+        type: date
+        required: false
+
+      vault_path:
+        type: absolute_path
+        required: true
+        description: |
+          Obsidian vault 绝对路径。工具默认从 profile 文件位置 `parent.parent`
+          推导（profile 在 <VAULT>/_Governance/ 下），但显式声明可避免漂移。
+
+      repo_path:
+        type: absolute_path
+        required: false
+        description: "项目代码仓库绝对路径（若有）"
+
+      memory_path:
+        type: absolute_path
+        required: false
+        description: "Claude Code auto-memory 路径（若用 Claude Code）"
+
+      scope_under_constitution:
+        type: string
+        required: false
+        description: "本项目在宪法 scope 下的层级（如 '<id> + L0/L1'）"
+
+  # ---------------------------------------------------------------------------
+
+  paths:
+    required: true
+    description: "vault 内的目录布局。工具用这些字段做扫描 / 分类 / 路由。"
+    fields:
+      concept_cards_dir:
+        type: vault_relative_path
+        default: "_Concepts/"
+        description: "SSOT 主卡目录"
+
+      draft_cards_dir:
+        type: vault_relative_path
+        default: "03-Zettelkasten/"
+        description: "seedling / 自由演化区"
+
+      obsidian_log_dir:
+        type: vault_relative_path
+        default: "00-Journal/"
+        description: "每日 Journal 目录（可含项目子目录如 00-Journal/<id>/）"
+
+      narrative_spine:
+        type: vault_relative_path
+        required: false
+        description: "项目 MOC 叙事骨架（R04），如 02-Projects/<name>.md"
+
+      domain_moc_glob:
+        type: glob
+        default: "_Concepts/@索引-*.md"
+
+      concept_cards_glob:
+        type: glob
+        default: "_Concepts/概念-*.md"
+
+      insight_cards_glob:
+        type: glob
+        default: "03-Zettelkasten/洞察-*.md"
+
+      literature_dir:
+        type: vault_relative_path
+        required: false
+        description: "（research profile）文献卡目录，如 01-Literature/"
+
+  # ---------------------------------------------------------------------------
+
+  core_concepts:
+    required: false
+    type: list
+    description: |
+      项目核心概念清单（R01 SSOT 保护对象）。每张主卡必须存在于
+      paths.concept_cards_dir 下且 frontmatter `authoritative: true`。
+    item_fields:
+      name:
+        type: string
+        required: true
+        description: "短术语名（用户可读）"
+      aliases:
+        type: list[string]
+        required: false
+      master_card:
+        type: string
+        required: true
+        description: "主卡文件名 stem（不含 .md 后缀）"
+      tier:
+        type: enum
+        values: [L0, L1, L2]
+        default: "L1"
+        description: |
+          L0 = 通用方法学（跨项目）
+          L1 = 通用领域（可被同领域其他项目复用）
+          L2 = 项目特有
+      scope:
+        type: string
+        required: true
+        format: "'global' OR 'project:<project_id>'"
+        example: "project:urban-crow-toolevo"
+
+  # ---------------------------------------------------------------------------
+
+  gate_status:
+    required: false
+    description: "Gate 判据状态机读快照（PROJECT.md 是 source of truth）"
+    fields:
+      source_of_truth:
+        type: string
+        default: "PROJECT.md"
+      snapshot_date:
+        type: date
+      gates:
+        type: dict
+        description: "{ gate_name: status }"
+        value_enum: [TODO, IN_PROGRESS, PASS, FAIL]
+
+  # ---------------------------------------------------------------------------
+
+  health:
+    required: false
+    description: |
+      kms_health.sh / kms_r06_classify.py 的可选配置覆盖。
+      所有字段都有合理默认；只在需要项目特化时才填。
+    fields:
+
+      r06:
+        description: "R06 断链分类配置"
+        fields:
+          historical_window_days:
+            type: int
+            default: 30
+            description: "Journal 文件超过此天数算 historical-journal（不 actionable）"
+
+          governance_roots:
+            type: list[string]
+            default: ["_Governance"]
+            description: "source 在这些根下 → governance-example（Arbiter 专属）"
+
+          template_roots:
+            type: list[string]
+            default: ["_Skills/90-Templates"]
+            description: "source 在这些根下 → skills-template（模板天然占位）"
+
+          skills_roots:
+            type: list[string]
+            default: ["_Skills"]
+            description: "source 在这些根下（且不在 template_roots）→ skills-active（actionable）"
+
+          journal_roots:
+            type: list[string]
+            default: ["00-Journal"]
+            description: "source 在这些根下且超 window 天数 → historical-journal"
+
+          schema_placeholders:
+            type: list[string]
+            default: ["g", "link", "master_card", "target_card_name", "concept", "新", "旧", "本项目名称", "..."]
+            description: "target 完全等于这些字面量 → schema-placeholder"
+
+          doc_placeholder_keywords:
+            type: list[string]
+            default: ["对应的", "某个", "你的项目", "your_project", "xxx", "yyy", "zzz", "todo"]
+            description: "target 包含这些关键字 → doc-placeholder"
+
+          actionable_categories:
+            type: list[string]
+            default: ["active-broken", "skills-active", "section-title"]
+            description: "计入 actionable rate 的分类（其他分类只入 raw）"
+
+          attachment_extensions:
+            type: list[string]
+            default: [".gif", ".png", ".jpg", ".jpeg", ".pdf", ".svg", ".webp", ".mp4", ".mov", ".csv", ".xlsx", ".zip"]
+            description: "这些扩展名的链接是嵌入附件，跳过断链检查"
+
+          actionable_threshold:
+            type: float
+            default: 5.0
+            description: "actionable rate 阈值（百分比），超过即红"
+
+      r02:
+        description: "R02 frontmatter 覆盖率配置"
+        fields:
+          required_fields:
+            type: list[string]
+            default: ["id", "type", "status", "scope", "created", "last_reviewed"]
+          coverage_threshold:
+            type: float
+            default: 95.0
+
+      r05:
+        description: "R05 孤儿卡配置"
+        fields:
+          allowed_orphan_types:
+            type: list[string]
+            default: ["experience", "pitfall", "typography"]
+            description: "允许永久 seedling + 无入链的 type 名"
+
+  # ---------------------------------------------------------------------------
+
+  extras:
+    required: false
+    description: |
+      项目自定义字段。Muninn 工具**不读**这一节。供项目自己扩展。
+      若需要工具读取的新字段，应起 schema v2 proposal。
+
+# ============================================================================
+#  最小可用示例（对应一个空骨架项目）
+# ============================================================================
+
+example_minimal:
+  meta:
+    project_id: "my-project"
+    vault_path: "/Users/me/Documents/my-vault"
+  paths: {}            # 全部用 default
+  core_concepts: []    # 还没建主卡

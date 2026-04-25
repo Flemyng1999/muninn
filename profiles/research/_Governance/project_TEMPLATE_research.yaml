@@ -1,5 +1,6 @@
 # ============================================================================
 #  project_<YOUR_PROJECT>.yaml (research profile)
+#  Schema：见 _Governance/schemas/project_profile.yaml (v1.0)
 #  修改权限：Arbiter（你）
 # ============================================================================
 
@@ -10,12 +11,23 @@ meta:
   version: "0.1.0"
   created: "YYYY-MM-DD"
   last_reviewed: "YYYY-MM-DD"
+  vault_path: "<VAULT_ABSOLUTE_PATH>"
+  repo_path: "<PROJECT_REPO_ABSOLUTE_PATH>"
   scope_under_constitution: "<YOUR_PROJECT> + L0/L1"
-  repo_path: "<项目仓库绝对路径>"
+
+paths:
+  concept_cards_dir: "_Concepts/"
+  draft_cards_dir: "03-Zettelkasten/"
+  obsidian_log_dir: "00-Journal/"
+  narrative_spine: "02-Projects/<项目中文名>.md"
+  concept_cards_glob: "_Concepts/概念-*.md"
+  domain_moc_glob: "_Concepts/@索引-*.md"
+  insight_cards_glob: "03-Zettelkasten/洞察-*.md"
+  literature_dir: "01-Literature/"                                  # research profile 特有
 
 # 核心概念：5–10 张主卡级别术语（跨 3 篇以上被引用才算核心）
-# tier: L1 = 跨项目通用（scope: global） / L2 = 本项目特有（scope: project:<YOUR_PROJECT>）
-core_concepts:
+# tier: L0 = 方法学通用 / L1 = 领域通用 / L2 = 项目特有
+core_concepts: []
   # - name: "<术语>"
   #   aliases: ["<别名1>", "<别名2>"]
   #   master_card: "概念-<术语>"
@@ -26,16 +38,10 @@ core_concepts:
 gate_status:
   source_of_truth: "PROJECT.md"
   snapshot_date: "YYYY-MM-DD"
-  gates:
+  gates: {}
     # gate_0_<name>: "TODO"  # 可用值：TODO / IN_PROGRESS / PASS / FAIL
 
-paths:
-  narrative_spine: "02-Projects/<项目中文名>.md"
-  daily_log_dir: "log/"
-  obsidian_log_dir: "00-Journal/"
-  concept_cards_dir: "_Concepts/"
-  concept_cards_glob: "_Concepts/概念-*.md"
-  domain_moc_glob: "_Concepts/@索引-*.md"
-  insight_cards_glob: "03-Zettelkasten/洞察-*.md"
-  draft_cards_dir: "03-Zettelkasten/"
-  literature_dir: "01-Literature/"                                  # research profile 特有
+# 可选：health 配置覆盖（默认值见 schema）
+# health:
+#   r06:
+#     historical_window_days: 30
