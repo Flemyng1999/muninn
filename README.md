@@ -66,7 +66,10 @@ muninn/
 ├── docs/
 │   ├── philosophy.md             # 为什么这样设计
 │   └── profile-comparison.md     # profile 对比
-├── examples/                     # 示例 vault（TODO）
+├── examples/                     # 示例（3 套）
+│   ├── research-full/            # 完整研究示例：城市乌鸦工具使用演化
+│   ├── product-teaser/           # 产品 teaser：决策卡 + 用户画像
+│   └── engineering-teaser/       # 工程 teaser：ADR + 故障复盘
 └── scripts/
     └── bootstrap.sh              # core + profile overlay 工具
 ```

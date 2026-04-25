@@ -1,0 +1,62 @@
+meta:
+  project_id: "urban-crow-toolevo"
+  project_name_zh: "城市乌鸦工具使用演化研究"
+  project_name_en: "Urban Crow Tool-Use Evolution"
+  version: "0.2.1"
+  created: "2025-11-03"
+  last_reviewed: "2026-04-24"
+  scope_under_constitution: "urban-crow-toolevo + L0/L1"
+  repo_path: "/Users/researcher/Code/urban-crow-toolevo"
+
+core_concepts:
+  # ---- L1 通用（4 张，scope: global） ----
+  - name: "工具使用"
+    aliases: ["tool_use", "object manipulation"]
+    master_card: "概念-工具使用定义"
+    tier: "L1"
+    scope: "global"
+
+  - name: "文化传播"
+    aliases: ["cultural transmission", "social learning"]
+    master_card: "概念-文化传播机制"
+    tier: "L1"
+    scope: "global"
+
+  - name: "社会学习指标"
+    aliases: ["social_learning_index", "SLI"]
+    master_card: "概念-社会学习指标"
+    tier: "L1"
+    scope: "global"
+
+  # ---- L2 项目特有（2 张，scope: project:urban-crow-toolevo） ----
+  - name: "城市环境适应性"
+    aliases: ["urban_adaptation", "UAI"]
+    master_card: "概念-城市环境适应性"
+    tier: "L2"
+    scope: "project:urban-crow-toolevo"
+
+  - name: "Gate α"
+    aliases: ["gate_alpha", "工具识别准确率"]
+    master_card: "概念-Gateα-工具识别准确率"
+    tier: "L2"
+    scope: "project:urban-crow-toolevo"
+
+gate_status:
+  source_of_truth: "PROJECT.md"
+  snapshot_date: "2026-04-24"
+  gates:
+    gate_0_video_corpus_coverage: "PASS"           # 视频语料 ≥ 200 小时
+    gate_alpha_tool_recognition_accuracy: "PASS"   # 工具识别准确率 ≥ 0.85
+    gate_beta_individual_vs_cultural: "IN_PROGRESS" # 个体创新 vs 文化传播归因
+    gate_gamma_cross_city_generalization: "TODO"   # 跨城市泛化
+
+paths:
+  narrative_spine: "02-Projects/城市乌鸦工具使用演化研究.md"
+  daily_log_dir: "log/"
+  obsidian_log_dir: "00-Journal/"
+  concept_cards_dir: "_Concepts/"
+  concept_cards_glob: "_Concepts/概念-*.md"
+  domain_moc_glob: "_Concepts/@索引-*.md"
+  insight_cards_glob: "03-Zettelkasten/洞察-*.md"
+  draft_cards_dir: "03-Zettelkasten/"
+  literature_dir: "01-Literature/"
