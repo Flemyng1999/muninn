@@ -67,7 +67,7 @@ REPO="<PROJECT_REPO_PATH>"             # → 你的项目 git 仓库路径，没
 按顺序打开读一遍，不必全记：
 
 1. `~/my-vault/README.md`（顶层）
-2. `_Governance/@宪法.md` 重点 §三 角色 / §六 规则速览 / §R08 §8.7
+2. `_Governance/@宪法.md` 重点 §三 角色 / §六 规则速览 / §R08 §8.7 / §8.8
 3. `_Skills/02-Workflows/@工作流索引.md`（知道 8 套工作流都在哪）
 4. `_Concepts/README.md` + `03-Zettelkasten/README.md`（知道什么放哪）
 

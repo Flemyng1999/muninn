@@ -22,7 +22,7 @@
 
 1. **SSOT（Single Source of Truth）**：核心概念只在一处有权威定义
 2. **Arbiter-Executor 边界**：你是决策者，AI 是执行者，有明确制度防 AI 瞎改
-3. **生命周期管理**：卡片有 seedling / live / archived / superseded 状态流转
+3. **生命周期管理**：卡片有 seedling / live / superseded / deprecated / retracted / archived 状态流转
 4. **健康度仪表盘**：周度脚本扫描孤儿率 / 断链率 / frontmatter 覆盖等 8 项指标
 
 ## 三档 Profile
@@ -69,7 +69,8 @@ muninn/
 │   ├── philosophy.md             # 为什么这样设计
 │   ├── profile-comparison.md     # profile 对比
 │   ├── repo-vault-interface.md   # repo ↔ vault 接口契约模板
-│   ├── agent-onboarding.md       # 项目入口文件实践（10 项内容契约）
+│   ├── working-control-panel.md  # WORKING.md 运行态控制面板规则
+│   ├── agent-onboarding.md       # 项目入口文件实践（11 项内容契约）
 │   └── known-issues.md           # 已知问题与技术债务清单
 ├── examples/                     # 示例（3 套）
 │   ├── research-full/            # 完整研究示例：城市乌鸦工具使用演化
@@ -92,7 +93,7 @@ muninn/
 - **R07 升级队列**：seedling → live 有流程
 - **R08 生命周期 + 编辑深度矩阵**：🟢 / 🟡 / 🔴 三档，🔴 要 Q3 三要素授权
 
-### 2. R08 §8.7 编辑深度矩阵
+### 2. R08 §8.7 编辑深度矩阵 + §8.8 内容卫生
 
 AI 改卡时按动词判档：
 
@@ -103,6 +104,8 @@ AI 改卡时按动词判档：
 | 🔴 definition_governance | 改定义 / 翻 / 废 / 撤 / 改规则 | **只起草**，等 Q3 三要素书面批准 |
 
 Q3 三要素：(a) Arbiter 审阅 (b) grep 入链评估 (c) 书面明确判断。
+
+R08 §8.8 约束长期卡片的内容卫生：临时路线名要改写成长期机制表达，任务状态留在 Journal / WORKING / GAPS / 任务区，重要结论尽量说明证据强度，除非讨论对象就是 agent/tool，否则正文不写 agent 过程语。
 
 ### 3. 8 套 AI 工作流（开箱即用）
 

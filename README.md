@@ -23,7 +23,7 @@ A public template repository that lets you spin up a working Obsidian KMS in 5 m
 
 1. **SSOT (Single Source of Truth)** — every core concept has exactly one authoritative card
 2. **Arbiter–Executor boundary** — you decide; AI executes; explicit rules prevent AI from rewriting your definitions
-3. **Lifecycle management** — every card carries `seedling / live / archived / superseded` state
+3. **Lifecycle management** — every card carries `seedling / live / superseded / deprecated / retracted / archived` state
 4. **Health dashboard** — a weekly script reports orphans, broken links, frontmatter coverage, etc. (8 metrics, R01–R08)
 
 ## Three profiles
@@ -72,6 +72,7 @@ muninn/
 │   ├── philosophy.md             # why this design
 │   ├── profile-comparison.md     # research vs product vs engineering
 │   ├── repo-vault-interface.md   # repo ↔ vault contract template
+│   ├── working-control-panel.md  # WORKING.md runtime-state rules
 │   ├── agent-onboarding.md       # entry-file content contract (CLAUDE.md / AGENTS.md / ...)
 │   └── known-issues.md           # debt log
 │
@@ -96,7 +97,7 @@ muninn/
 - **R07 upgrade queue** — `seedling → live` is a process
 - **R08 lifecycle + edit-depth matrix** — three tiers; the deepest tier requires Q3 three-element approval
 
-### 2. R08 §8.7 edit-depth matrix
+### 2. R08 §8.7 edit-depth matrix + §8.8 content hygiene
 
 When AI is asked to modify a card, classify by verb:
 
@@ -107,6 +108,8 @@ When AI is asked to modify a card, classify by verb:
 | 🔴 definition_governance | change definition / flip / deprecate / retract / change rules | **draft only**, wait for Q3 three-element written approval |
 
 Q3 three-element: (a) Arbiter has read it (b) impact assessed via grep (c) explicit written judgment (not just "OK").
+
+R08 §8.8 adds content-quality rules for long-lived cards: decontextualize temporary route names, keep short-term task state out of evergreen cards, mark evidence strength where useful, and remove agent-process wording unless the card is about agent/tool behavior.
 
 ### 3. Eight ready-to-paste AI workflows
 

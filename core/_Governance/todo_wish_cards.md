@@ -14,4 +14,6 @@
 
 ## 通用域
 
-（暂无）
+- `[[会议笔记模版]]` — 会议沉淀 workflow 的用户自建模板；scope: global；状态：待 Arbiter 按个人工作流决定是否创建
+- `[[文献笔记模板]]` — 文献沉淀 workflow 的用户自建模板；scope: global；状态：待 Arbiter 按个人工作流决定是否创建
+- `[[@未来任务池]]` — 流水记录 / 晚间结项 workflow 的用户自建任务池 MOC；scope: global；状态：待 Arbiter 按个人工作流决定是否创建

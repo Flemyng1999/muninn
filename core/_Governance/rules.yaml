@@ -5,9 +5,9 @@
 # ============================================================================
 
 meta:
-  version: "0.1.3"
+  version: "0.1.4"
   created: "2026-04-23"
-  last_reviewed: "2026-04-24"
+  last_reviewed: "2026-04-28"
   scope: "<YOUR_PROJECT> + L0/L1"      # 当前试点范围（宪法层）
   max_rules: 20
   current_rules: 8
@@ -46,7 +46,7 @@ R02_yaml_metadata:
     required_fields:
       - "id"               # 文件名 stem
       - "type"             # concept | insight | thought | law | pitfall | experience | typography | literature | governance
-      - "status"           # seedling | live | superseded | archived
+      - "status"           # seedling | live | superseded | deprecated | retracted | archived
       - "scope"            # global | project:<name>
       - "created"          # YYYY-MM-DD
       - "last_reviewed"    # YYYY-MM-DD
@@ -179,7 +179,7 @@ R07_narrative_spine_in_vault:
     - "后续：任何新项目启动时必须同步建 narrative_spine"
   action:
     current_migration:
-      - "memory/project_narrative_spine.md → 迁移为 vault/02-Projects/冠层反射率分布照明角度归一化.md 的主叙事节"
+      - "memory/project_narrative_spine.md → 迁移为 vault/02-Projects/<PROJECT_MOC>.md 的主叙事节"
       - "memory 侧保留 pointer 指向 vault"
     ongoing:
       - "每个主项目在 02-Projects/ 有一个 MOC 文件，承载 narrative_spine"
@@ -357,6 +357,72 @@ R08_lifecycle_governance:
     historical_lesson:
       wave1_2026_04_23: "Wave 1 批量 authoritative 活化采用单句'批准'口令。R08 §8.7 定稿（2026-04-24）后此模式废弃；Wave 1 作为过渡期先例保留记录，不追溯。"
 
+  # ---- 8.8 卡片长期可理解性与证据卫生（与 §8.7 编辑深度互补）----
+  card_content_quality:
+    purpose: "保证 Zettelkasten 卡片长期可理解，避免短期工作状态和 agent 过程语污染知识正文"
+    naming_scheme: "卡片长期可理解性与证据卫生（v0.1.4）"
+    principles:
+      decontextualization:
+        label_zh: "卡片去语境化"
+        judge: "三个月后未参与当前会话的人，仅凭本卡与 linked cards 可理解"
+        avoid:
+          - temporary_route_names: "临时路线名，如 Route B / Track 2 / 方案 A-B"
+          - undefined_verdict_labels: "未自足定义的 verdict，如 PASS / PARTIAL / ELONGATED_ONLY"
+          - agent_process_language: "agent 过程语，如 Claude 认为 / Codex 建议"
+          - short_term_task_state: "短期任务状态，如 今天主线 / 下一步 / 明天第一动作"
+          - unexplained_internal_alias: "未解释的内部缩写或口头代号"
+        prefer:
+          - durable_mechanism: "长期机制表达"
+          - reproducible_experiment: "可复现实验设置与结果"
+          - evidence_and_boundary: "证据、边界与限制"
+        rewrite_examples:
+          - "Route B → patch-level 状态估计"
+          - "row-aware probe → 拉长/旋转空间支持域对照实验"
+          - "Track 4 → 物理相关性诊断"
+          - "今天结论 → 带日期和设置的实验结果"
+      state_knowledge_separation:
+        label_zh: "状态信息与知识内容分离"
+        rule: "卡片记录沉淀知识；WORKING.md / journal / GAPS / 任务区记录项目运行状态"
+        card_should_contain:
+          - facts
+          - reproducible_setup
+          - evidence
+          - mechanism
+          - limitation
+          - validation
+        card_should_not_contain:
+          - task_priority
+          - tomorrow_action
+          - agent_assignment
+          - transient_workflow_state
+          - unsolidified_operation_plan
+      evidence_strength:
+        label_zh: "证据强度分级"
+        rule: "卡片结论应标注或暗示证据强度，避免把推理、间接证据、pilot 和系统实验混为一谈"
+        values:
+          theoretical: "机制推理，尚未直接验证"
+          indirect-evidence: "有间接实验或相关结果支持"
+          pilot-supported: "有专门 pilot 支持"
+          experiment-supported: "有系统实验支持"
+          rejected: "已被实验反证或降级"
+        notes:
+          - "不引入 bounded-assumption；研究假设边界不作为本条法条"
+          - "不要求旧卡一次性回填；新卡和重大修订卡应尽量说明证据强度"
+      agent_noise_reduction:
+        label_zh: "Agent 产物降噪"
+        rule: "Agent 名称通常属于 log/provenance；知识卡正文记录客观结果、证据和边界"
+        exception: "当卡片讨论 agent/tool 行为本身时，可在正文出现 agent 名称"
+        rewrite_examples:
+          - "Claude 认为 gap geometry harmful → 某日期 patch-level 对照实验中，加入 binary-mask gap features 后关键指标下降"
+    non_goals:
+      - "不规范研究建模假设取舍"
+      - "不把假设边界原则写入 KMS 法条"
+      - "不把目的导向误差容忍原则写入 KMS 法条"
+      - "不禁止 journal / WORKING / GAPS 记录 agent 过程和短期调度"
+    actor: "Curator drafts/checks; Arbiter governs"
+    violation_level: "warn"
+    approved_by: "Arbiter 2026-04-28"
+
   actor: "Author/Curator（提议） + Arbiter（执行状态转换）"
   violation_level: "block"
   enforcement:
@@ -384,7 +450,7 @@ meta_rules:
 
   rule_count_cap:
     hard_limit: 20
-    current: 7
+    current: 8
     action_if_exceeded: "砍或合并，不得新增"
 
 # ============================================================================

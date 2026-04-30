@@ -1,5 +1,5 @@
 # ============================================================================
-#  概念主卡 YAML Schema — 03-Zettelkasten/概念-*.md 的补充规范
+#  概念主卡 YAML Schema — _Concepts/概念-*.md 的补充规范
 #  继承 card.yaml，添加额外强制字段
 # ============================================================================
 
@@ -7,7 +7,8 @@ schema_name: "concept"
 version: "0.1"
 extends: "card.yaml"
 applies_to:
-  - "03-Zettelkasten/概念-*.md"
+  - "_Concepts/概念-*.md"
+  - "03-Zettelkasten/概念-*.md（仅 seedling 草稿；通过审阅后迁入 _Concepts）"
   - "尤其是 rules.yaml 中 core_concepts 列表的主卡"
 
 # ----------------------------------------------------------------------------

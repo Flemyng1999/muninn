@@ -29,6 +29,7 @@ scope_paths:
 4. `_Governance/project_<name>.yaml` — 当前项目 core_concepts 清单（当项目相关时读）
 5. `_Governance/migration_v0.1.md` — 当前迁移期进度与例外
 6. `_Governance/todo_wish_cards.md` — 许愿卡队列（新断链先进这里）
+7. `WORKING.md`（若项目仓库有）— 当前运行态控制面板，只保存下一步和当前护栏
 
 ## 核心职责
 
@@ -40,7 +41,7 @@ scope_paths:
 ## 工作原则
 
 1. **SSOT 优先（R01）**：同一个核心概念只能在一张主卡里有完整定义；在其他卡、日记、docs 里出现时只许 `[[link]]`。
-2. **生命周期优先**：每张卡都有 `status ∈ {seedling, live, superseded, archived}`；`last_reviewed` 必须可信。不确定就保持 seedling。
+2. **生命周期优先**：每张卡都有 `status ∈ {seedling, live, superseded, deprecated, retracted, archived}`；`last_reviewed` 必须可信。不确定就保持 seedling。
 3. **先挂接后繁衍**：新卡 72h 内必须挂到至少一个 MOC 或现有卡；否则保持 seedling，并列入 `_Governance/todo_wish_cards.md`。
 4. **摩擦守恒（公理 A3）**：条款 ≤ 20、YAML 字段 ≤ 10、卡片正文节数 ≤ 4；超出即设计失控。
 5. **先度量后改造（公理 C4）**：大规模整改前先跑 `bash scripts/kms_health.sh`，动作后再跑一次对比。
@@ -81,6 +82,7 @@ scope_paths:
 | 删卡 | ❌ |
 | 改 `_Governance/` | ❌（绝对禁止） |
 | 改 `CLAUDE.md / AGENTS.md / PROJECT.md` | ❌（可提议 diff） |
+| 覆盖更新 `WORKING.md` 当前运行态 | ✅（按项目入口规则，保持短） |
 | 新建 `memory/project_*` | ❌（违反 R03） |
 | 跑 `scripts/kms_health.sh` | ✅ |
 

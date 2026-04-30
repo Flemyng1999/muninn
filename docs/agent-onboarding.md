@@ -23,13 +23,13 @@
 **Muninn 的答案**：定义**一份内容契约**（本文档），项目按需复制到一个或多个入口文件。
 所有入口文件的**内容相互一致**，文件名由项目和工具链决定。
 
-## 必要内容契约（10 个字段）
+## 必要内容契约（11 个字段）
 
-无论入口文件叫什么，应**至少**包含以下 10 项：
+无论入口文件叫什么，应**至少**包含以下 11 项：
 
 | # | 字段 | 内容 | 为什么 |
 |---|---|---|---|
-| 1 | **宪法版本号** | "本项目按 KMS 宪法 v0.1.3" | 防止漂移 |
+| 1 | **宪法版本号** | "本项目按 KMS 宪法 v0.1.4" | 防止漂移 |
 | 2 | **接口文档指针** | `docs/repo-vault-interface.md` | repo↔vault 桥梁 |
 | 3 | **Vault 绝对路径** | `<VAULT_ABSOLUTE_PATH>` | AI 找不到 vault 就抓瞎 |
 | 4 | **Project profile 路径** | `<VAULT>/_Governance/project_<id>.yaml` | 机读契约入口 |
@@ -38,7 +38,8 @@
 | 7 | **启动顺序** | AI 必须按顺序读哪几份文件（建议至少 6 份） | 自举质量 |
 | 8 | **健康检查命令** | `bash scripts/kms_health.sh --profile <path>` | 可立即跑 |
 | 9 | **写入路由** | 新知识第一落点是 Journal / Zettelkasten / _Concepts | SSOT 守则 |
-| 10 | **冲突优先级** | rules.yaml > @宪法.md > 入口文件 > 代码注释 | 治理冲突解决 |
+| 10 | **WORKING 控制面板规则** | "WORKING.md 只存当前运行态；覆盖更新；详情外迁" | 防止任务状态污染知识库 |
+| 11 | **冲突优先级** | rules.yaml > @宪法.md > 入口文件 > 代码注释 | 治理冲突解决 |
 
 ## 入口文件模板
 
@@ -52,7 +53,7 @@
 
 ## 1. 宪法版本
 
-- **KMS 宪法 v0.1.3**（含 R08 §8.7 编辑深度矩阵）
+- **KMS 宪法 v0.1.4**（含 R08 §8.7 编辑深度矩阵 + §8.8 内容卫生）
 - 治理源：`<VAULT>/_Governance/@宪法.md`
 - 机读法条：`<VAULT>/_Governance/rules.yaml`
 - 项目 profile：`<VAULT>/_Governance/project_<PROJECT_ID>.yaml`
@@ -82,6 +83,13 @@
 
 Q3 三要素：(a) Arbiter 审阅 (b) 入链评估 (c) 书面明确判断（非"OK"一字）
 
+## 3b. R08 §8.8 内容卫生
+
+- 临时路线名、内部代号、未定义 verdict 要改写为长期可理解的机制 / 实验设置 / 证据。
+- "下一步"、任务优先级、agent 分工放 Journal / WORKING / GAPS / 任务区，不放 evergreen 卡正文。
+- 重要结论尽量说明证据强度：theoretical / indirect-evidence / pilot-supported / experiment-supported / rejected。
+- 除非卡片讨论 agent/tool 行为本身，否则正文不写 agent 过程语。
+
 ## 4. 启动顺序（必读）
 
 1. 本文件
@@ -92,6 +100,15 @@ Q3 三要素：(a) Arbiter 审阅 (b) 入链评估 (c) 书面明确判断（非"
 6. `PROJECT.md` + `WORKING.md`
 
 读完 6 份再开始任何实施任务。
+
+## 4b. WORKING.md 控制面板规则
+
+- `WORKING.md` 只存当前运行态，不存历史归档和长期知识。
+- 保留一个主线、最多两个 side tracks、最多 5 条当前判断、最多 3 个 blocker、3-5 条最近 verdict 指针。
+- 会话结束时覆盖更新，不追加流水。
+- 过程细节进 `log/YYYY-MM-DD.md`；稳定证据进 `PROJECT.md`；开放缺陷进 `GAPS.md`；长期知识进 `_Concepts/` / `03-Zettelkasten/`。
+- 下一动作必须可立即执行；写不出第一动作就先收敛问题。
+- 主线 / 第一动作 / 平台规则变化时立即更新 `WORKING.md`。
 
 ## 5. 健康检查
 

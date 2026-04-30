@@ -80,7 +80,7 @@ For the full field reference, see `_Governance/schemas/project_profile.yaml` aft
 Open these in order in Obsidian:
 
 1. `~/my-vault/README.md` (top level)
-2. `_Governance/@宪法.md` — focus on §三 (roles), §六 (rule overview), §R08 §8.7 (edit-depth matrix)
+2. `_Governance/@宪法.md` — focus on §三 (roles), §六 (rule overview), §R08 §8.7 (edit-depth matrix), and §8.8 (content hygiene)
 3. `_Skills/02-Workflows/@工作流索引.md` — locate the 8 workflows
 4. `_Concepts/README.md` + `03-Zettelkasten/README.md` — what goes where
 

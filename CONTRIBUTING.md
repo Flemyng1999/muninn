@@ -40,7 +40,7 @@ id: <snake_case 短名>
 name: <用户可读名>
 description: <一句话说明>
 status: stable | wip
-core_version_required: ">=0.1.3"
+core_version_required: ">=0.1.4"
 maintainer: "@<github handle>"
 
 extras:

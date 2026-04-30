@@ -65,7 +65,7 @@ KMS 面向工作还需读相关 MOC 或目标卡。
 | 新信息 | 第一落点 | 升级路径 |
 |---|---|---|
 | 实验原始结果 | `log/YYYY-MM-DD.md` | 若可复用，加日志的"升级候选"节 |
-| 当前下一步 / 会话状态 | `WORKING.md` | 保持短；不变成知识库 |
+| 当前下一步 / 会话状态 | `WORKING.md` | 覆盖更新当前控制面板；保持短；不变成知识库 |
 | 稳定 Gate 证据 | `PROJECT.md` | KMS profile 镜像 status 快照 |
 | 开放方法学缺陷 | `GAPS.md` | 解决的经验可升级为 insight / pitfall 卡 |
 | 稳定洞察 / 踩坑 / 思考 | `<VAULT>/03-Zettelkasten/` 起 seedling | Curator / Arbiter 可后续 promote 或挂链 |
@@ -80,6 +80,19 @@ KMS 面向工作还需读相关 MOC 或目标卡。
 - Gate 状态由 `PROJECT.md` 决定；KMS profile 镜像它供机读治理
 - 每日 log 是**追加友好**的研究记录；KMS 卡片是**生命周期管理**的知识资产
 - 健康检查**报告 + 指引**；不静默 rewrite 治理文件
+
+## WORKING.md 控制面板规则
+
+`WORKING.md` 是 repo 侧运行态层，属于 KMS 接口的一部分。它不是历史归档，也不是 evergreen 知识库。
+
+推荐规则见 [WORKING.md Control Panel](working-control-panel.md)。核心约束：
+
+- 只保存当前主线、阶段目标、最多 5 条当前判断、最多 3 个 blocker、下一动作、护栏、最近 3-5 条 verdict 指针、待 Arbiter/KMS 同步项。
+- 会话结束时覆盖更新，不追加流水。
+- 当日过程、verdict 详情和长解释进 log；稳定事实进 `PROJECT.md`；漏洞进 `GAPS.md`；长期知识进 `_Concepts/` 或 `03-Zettelkasten/`。
+- 同一时刻只能有一个主线，最多两个 side tracks。
+- 下一动作必须能立即执行；写不出第一动作说明主线未收敛。
+- 主线、第一动作或平台规则事实变化时立即更新，不等到 session close。
 
 ## 健康检查方向
 

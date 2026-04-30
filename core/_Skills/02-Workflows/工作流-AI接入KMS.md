@@ -22,7 +22,7 @@ scope_paths:
 正式投喂入口：[[_Skills/02-Workflows/工作流-AI接入KMS-正式提示词]]
 
 > [!abstract]- 适用场景
-> 把 Claude Code 以外的 AI（ChatGPT / Gemini / Claude.ai Web / Codex / Copilot Chat / 本地 LLM）在 5 分钟内拉进本项目的 KMS，让它按宪法 v0.1.3 行事。
+> 把 Claude Code 以外的 AI（ChatGPT / Gemini / Claude.ai Web / Codex / Copilot Chat / 本地 LLM）在 5 分钟内拉进本项目的 KMS，让它按宪法 v0.1.4 行事。
 >
 > **不适用**：Claude Code 在本仓库内跑（auto-memory + `CLAUDE.md` 自动生效，不需要这套流程）。
 
@@ -37,8 +37,8 @@ scope_paths:
 1. `_Governance/@宪法.md`
 2. `_Governance/rules.yaml`
 3. `_Governance/project_<YOUR_PROJECT>.yaml`
-4. `_Concepts/@索引-冠层路径分解.md`
-5. `02-Projects/冠层反射率分布照明角度归一化.md`
+4. `_Concepts/@索引-<DOMAIN>.md`（若项目已有领域 MOC）
+5. `02-Projects/<PROJECT_MOC>.md`（项目叙事骨架）
 
 ## 执行步骤
 
@@ -46,15 +46,16 @@ scope_paths:
 2. 复制 `工作流-AI接入KMS-正式提示词.md` 全文作为首条消息。
 3. Web 端补贴 5 份核心文件正文（按 1–5 顺序）。
 4. 等 AI 按"验收清单"逐条答。
-5. **5 项全中 → 接入成功**；漏一条 → 重新投喂并指出漏项。
+5. **6 项全中 → 接入成功**；漏一条 → 重新投喂并指出漏项。
 
 ## 验收清单（AI 必须全中）
 
-1. 当前 Gate 状态：Gate 0 / α / β / γ + Phase 6 L3 全 PASS
+1. 当前 Gate 状态：能引用 `project_<YOUR_PROJECT>.yaml` 的 `gate_status` 字段，不臆造进度
 2. R08 §8.7 三档：`content_patch` 🟢 / `structure_refactor` 🟡 / `definition_governance` 🔴
-3. 不能直接改 `_Concepts/概念-*.md`（SSOT 主卡）、`_Governance/`、`_Skills/`
-4. 改 `rules.yaml` = 🔴 + Q3 三要素（a 审阅 / b 入链评估 / c 书面判断）
-5. 新知识第一落点：`00-Journal/<YOUR_PROJECT>/YYYY-MM-DD.md` 或 `03-Zettelkasten/`（seedling）
+3. R08 §8.8 内容卫生：长期卡片去语境化，任务状态留在 Journal / WORKING / GAPS / 任务区
+4. 不能直接改 `_Concepts/概念-*.md`（SSOT 主卡）、`_Governance/`、`_Skills/`
+5. 改 `rules.yaml` = 🔴 + Q3 三要素（a 审阅 / b 入链评估 / c 书面判断）
+6. 新知识第一落点：`00-Journal/<YOUR_PROJECT>/YYYY-MM-DD.md` 或 `03-Zettelkasten/`（seedling）
 
 ## 能力降级预期
 
@@ -78,7 +79,7 @@ scope_paths:
 
 ## 维护
 
-- 每次宪法升版（v0.1.x → v0.1.y）：更新正式提示词的"当前版本"字段 + 验收清单第 2 条。
+- 每次宪法升版（v0.1.x → v0.1.y）：更新正式提示词的"当前版本"字段 + 验收清单规则条目。
 - 每次 `project_<name>.yaml` 新增核心概念：提示词的"读文件"列表无需改（已用 glob/index），验收清单无需改。
 - 新增一个项目（非 <YOUR_PROJECT>）：复制一份提示词，把 `project_<name>.yaml` 名称替换。
 

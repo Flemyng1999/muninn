@@ -1,4 +1,4 @@
-# KMS Template（Obsidian 知识管理宪法 v0.1.3 骨架）
+# KMS Template（Obsidian 知识管理宪法 v0.1.4 骨架）
 
 ## 一句话
 Arbiter 说了算，AI 是 Executor。这是骨架，不是内容。
@@ -55,6 +55,7 @@ bash scripts/kms_health.sh --profile $(pwd)/_Governance/project_<你的项目>.y
 
 - AI 直接改 `_Governance/` 或 `_Concepts/概念-*.md` → 违反 R01/R08
 - 跳过 R08 §8.7 的 🟡 / 🔴 授权 → 违反边界
+- 把短期任务状态、临时路线名、agent 过程语写进长期卡片正文 → 违反 R08 §8.8 内容卫生
 - 核心概念在非主卡位置重写定义 → 违反 SSOT
 
 ---
@@ -94,6 +95,6 @@ IDE AI（Codex / Copilot）：让它 Read 上面那份提示词文件即可。
 
 ## 起源
 
-本模板从一个真实项目的宪法 v0.1.3 骨架剥离（2026-04-24）。
+本模板从一个真实项目的宪法 v0.1.4 骨架剥离（2026-04-28）。
 你的维护者信息：<ARBITER>
 问题反馈：<联系方式>

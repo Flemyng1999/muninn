@@ -98,4 +98,4 @@ A：是。每个项目对应一份 `project_<id>.yaml`。这是 SSOT 边界。
 A：不建议。profile 含 project_id / repo_path / core_concepts，多项目混用会破坏 SSOT。
 
 **Q：`backfill_yaml.py` 还没 profile 化？**
-A：是，仍是占位时代版本。后续 v0.1.4 会改造。
+A：是，仍是占位时代版本。后续 v0.2.0 会改造。

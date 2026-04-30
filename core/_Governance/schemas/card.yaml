@@ -110,6 +110,11 @@ optional:
     type: string_list
     description: "标签，供 Dataview/Bases 过滤"
 
+  evidence_strength:
+    type: enum
+    values: [theoretical, indirect-evidence, pilot-supported, experiment-supported, rejected]
+    description: "R08 §8.8 可选证据强度标记；新卡和重大修订卡建议填写或在正文说明"
+
   maturity:
     type: enum
     values: [seedling, budding, evergreen]
@@ -151,6 +156,7 @@ template_example: |
   created: 2026-04-23
   last_reviewed: 2026-04-23
   source: derivation:path-decomposition
+  evidence_strength: experiment-supported
   related:
     - "[[概念-ωL-叶片单次散射反照率]]"
     - "[[概念-wk-几何权重]]"
