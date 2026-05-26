@@ -32,3 +32,20 @@
 **下一步**：按 `README.md` 两周节奏表上手。任何后续宪法变更从 v0.1.4 起记录。
 
 **审核人**：<ARBITER>
+
+## v0.1.6 (2026-05-26)
+
+### Governance
+- Constitution upgraded to v0.1.6: `_Skills/` namespace brought under formal governance
+- **R09 — Skill Lifecycle & Usage Governance**: new rule defining Skill lifecycle states, metadata schema (`skill.yaml`), audit triggers, and forbidden write boundaries. Skills must carry `name/type/status/scope/version/updated/owner` frontmatter.
+
+### New Schema
+- `schemas/skill.yaml`: formal schema for all `_Skills/` assets (workflow/prompt/role/block/template), with required/optional fields, invariants, and legacy compatibility notes.
+
+### New Workflows
+- **Skill管理与审计** (workflow + formal prompt): Skill lifecycle management, audit checklist, migration procedures, usage tracking.
+- **健康体检**: lightweight layered health check (L0 routing → L1 structure → L2 content sampling → L3 full audit), with weekly/monthly calendar prompts.
+- **文献沉淀-规范落库** (workflow + formal prompt): Literature → KMS structured ingestion pipeline.
+
+### Rules
+- `rules.yaml`: version 0.1.4 → 0.1.6. Added R09 section. Simplified lifecycle states (removed `retracted`). Updated scope to include `_Skills/`. Naming scheme examples updated.

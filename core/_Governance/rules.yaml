@@ -1,16 +1,16 @@
 # ============================================================================
-#  rules.yaml — 宪法 v0.1.1 机读法条（通用部分，不含项目特定数据）
+#  rules.yaml — 宪法 v0.1.6 机读法条（通用部分，不含项目特定数据）
 #  项目特定 core_concepts 清单见 _Governance/project_<name>.yaml
 #  修改此文件需 Arbiter 批准，并在 CHANGELOG.md 留痕
 # ============================================================================
 
 meta:
-  version: "0.1.4"
+  version: "0.1.6"
   created: "2026-04-23"
-  last_reviewed: "2026-04-28"
-  scope: "<YOUR_PROJECT> + L0/L1"      # 当前试点范围（宪法层）
+  last_reviewed: "<DATE>"
+  scope: "<YOUR_PROJECT> + L0/L1 + _Skills"      # 当前试点范围（宪法层）
   max_rules: 20
-  current_rules: 8
+  current_rules: 9
   project_profiles:                         # 项目特定数据文件，R01 扫描时读取
     - "_Governance/project_<YOUR_PROJECT>.yaml"
 
@@ -46,7 +46,7 @@ R02_yaml_metadata:
     required_fields:
       - "id"               # 文件名 stem
       - "type"             # concept | insight | thought | law | pitfall | experience | typography | literature | governance
-      - "status"           # seedling | live | superseded | deprecated | retracted | archived
+      - "status"           # seedling | live | superseded | archived
       - "scope"            # global | project:<name>
       - "created"          # YYYY-MM-DD
       - "last_reviewed"    # YYYY-MM-DD
@@ -179,7 +179,7 @@ R07_narrative_spine_in_vault:
     - "后续：任何新项目启动时必须同步建 narrative_spine"
   action:
     current_migration:
-      - "memory/project_narrative_spine.md → 迁移为 vault/02-Projects/<PROJECT_MOC>.md 的主叙事节"
+      - "memory/project_narrative_spine.md → 迁移为 vault/02-Projects/冠层反射率分布照明角度归一化.md 的主叙事节"
       - "memory 侧保留 pointer 指向 vault"
     ongoing:
       - "每个主项目在 02-Projects/ 有一个 MOC 文件，承载 narrative_spine"
@@ -360,7 +360,7 @@ R08_lifecycle_governance:
   # ---- 8.8 卡片长期可理解性与证据卫生（与 §8.7 编辑深度互补）----
   card_content_quality:
     purpose: "保证 Zettelkasten 卡片长期可理解，避免短期工作状态和 agent 过程语污染知识正文"
-    naming_scheme: "卡片长期可理解性与证据卫生（v0.1.4）"
+    naming_scheme: "卡片长期可理解性与证据卫生（Arbiter 2026-04-28 批准）"
     principles:
       decontextualization:
         label_zh: "卡片去语境化"
@@ -376,10 +376,10 @@ R08_lifecycle_governance:
           - reproducible_experiment: "可复现实验设置与结果"
           - evidence_and_boundary: "证据、边界与限制"
         rewrite_examples:
-          - "Route B → patch-level 状态估计"
+          - "Route B → patch-level 多散射状态估计"
           - "row-aware probe → 拉长/旋转空间支持域对照实验"
           - "Track 4 → 物理相关性诊断"
-          - "今天结论 → 带日期和设置的实验结果"
+          - "今天结论 → 2026-04-28 实验结果"
       state_knowledge_separation:
         label_zh: "状态信息与知识内容分离"
         rule: "卡片记录沉淀知识；WORKING.md / journal / GAPS / 任务区记录项目运行状态"
@@ -413,7 +413,7 @@ R08_lifecycle_governance:
         rule: "Agent 名称通常属于 log/provenance；知识卡正文记录客观结果、证据和边界"
         exception: "当卡片讨论 agent/tool 行为本身时，可在正文出现 agent 名称"
         rewrite_examples:
-          - "Claude 认为 gap geometry harmful → 某日期 patch-level 对照实验中，加入 binary-mask gap features 后关键指标下降"
+          - "Claude 认为 gap geometry harmful → 2026-04-28 patch-level 对照实验中，加入 binary-mask gap features 后 adj/mid 指标下降"
     non_goals:
       - "不规范研究建模假设取舍"
       - "不把假设边界原则写入 KMS 法条"
@@ -429,6 +429,131 @@ R08_lifecycle_governance:
     - "kms_health.sh 扫描 status 分布 + retracted banner + superseded 双向一致"
     - "周报告列出违规点"
   friction_cost: "low（转换仪式固定，Curator 可脚本化 propagation 扫描）"
+
+
+# ----------------------------------------------------------------------------
+#  R09 — Skill 生命周期与使用统计治理
+# ----------------------------------------------------------------------------
+R09_skill_governance:
+  purpose: "让 _Skills/ 成为可治理、可清理、可迁移的 KMS 工作流资产 SSOT"
+  serves_goal: ["a", "b"]
+  scope:
+    namespace: "_Skills/"
+    schema_ref: "_Governance/schemas/skill.yaml"
+    adapter_rule: "项目 repo 只保存 adapter；canonical Skill body 属于 KMS"
+
+  trigger:
+    - "创建、修改、迁移、弃用、归档或删除任何 _Skills/ 资产"
+    - "新增 repo workflow 后判断其是否应升级为 KMS Skill"
+    - "月度或季度 Skill 使用频率审计"
+    - "本地 agent-installed skill 与 KMS canonical source 可能漂移"
+
+  lifecycle_states:
+    proposal:
+      meaning: "repo 或 vault 草案；尚非 canonical"
+      allowed_targets: [seedling, archived]
+    seedling:
+      meaning: "KMS 已收录但仍在试用；需要 usage/validation 证明"
+      allowed_targets: [live, deprecated, archived]
+    live:
+      meaning: "默认可调用的稳定 Skill"
+      allowed_targets: [deprecated, archived]
+    deprecated:
+      meaning: "不建议新用；保留 replacement / reason / date"
+      required_fields: [deprecation_reason, deprecation_date]
+      allowed_targets: [archived]
+    archived:
+      meaning: "历史保留，不进入推荐入口"
+      allowed_targets: []
+    removed:
+      meaning: "罕见删除；必须有无入链证明与 Arbiter 批准"
+      allowed_targets: []
+
+  required_metadata:
+    canonical_skill_assets_excluding_usage_rollups:
+      - name
+      - type
+      - status
+      - scope
+      - version
+      - updated
+      - owner
+    recommended:
+      - entry_prompt
+      - linked_role
+      - linked_workflow
+      - required_blocks
+      - target_folders
+      - scope_paths
+      - usage_tracking
+      - canonical_source
+      - triggers
+
+  operations:
+    create:
+      questions:
+        - "是否跨项目复用？若否，留在 repo adapter / docs/workflows"
+        - "触发语是什么？是否与现有 live Skill 冲突？"
+        - "允许读写哪些路径？禁区是什么？"
+        - "是否需要 project adapter？"
+        - "什么验证证明它能在冷启动会话中使用？"
+      default_status: seedling
+      actor: "Author/Curator may draft; Arbiter governs live promotion"
+    change:
+      classes:
+        patch: "typo / link / trigger alias / formatting"
+        minor: "步骤澄清 / 可选字段 / adapter 变量"
+        major: "工作流顺序、必填输出、写入路线、权限边界变化"
+        governance: "lifecycle、usage、schema、权限规则变化"
+      approval:
+        patch: "Curator"
+        minor: "Curator + source anchor"
+        major: "Arbiter"
+        governance: "Arbiter only"
+      rule: "non-patch change updates version and updated"
+    deprecate_or_remove:
+      rule: "先 deprecated，后 archived/removed；live Skill 不得 silent delete"
+      prerequisites:
+        - "replacement 或 deprecation_reason"
+        - "incoming link / index / usage scan"
+        - "Arbiter approval for archived/removed"
+    migrate:
+      rule: "repo workflow proves reusable → extract neutral body into _Skills/; repo keeps adapter only"
+      steps:
+        - "extract project-neutral procedure"
+        - "move repo paths to adapter"
+        - "replace duplicate repo prose with KMS pointer"
+        - "run reference sweep"
+    check:
+      required:
+        - "metadata completeness"
+        - "trigger uniqueness among live Skills"
+        - "dead links"
+        - "forbidden write boundary"
+        - "project adapter exists when requires_adapter=true"
+        - "local installed copies declare canonical source/version"
+        - "usage frequency review"
+
+  usage_metrics:
+    event_source: "same-day Journal marker"
+    marker_format: "<!-- skill-use: name=<skill> project=<project> outcome=used|skipped -->"
+    rollup_source: "_Skills/_usage/skill-usage-YYYY-MM.md"
+    principle: "canonical Skill files are not edited on every invocation; usage churn goes to Journal markers and rollups"
+    counts_as_use: "Skill materially shaped the workflow, not merely skimmed metadata"
+    review_thresholds:
+      seedling_zero_use_30d: "close proposal or archive unless Arbiter keeps it"
+      live_zero_use_90d: "review candidate"
+      live_lt_2_use_180d: "merge/deprecate candidate unless strategically important"
+      deprecated_zero_use_no_inbound_90d: "archive/remove candidate"
+      high_use_high_override: "split or redesign; canonical body too vague"
+
+  actor: "Author/Curator draft and maintain; Arbiter controls lifecycle/status/governance"
+  violation_level: "warn"
+  enforcement:
+    - "季度 Skill audit：metadata / trigger / dead-link / usage rollup"
+    - "低频 Skill 进入 review candidate，不自动删除"
+    - "未来脚本：kms_skill_audit.py 或等价 KMS reporter"
+  friction_cost: "medium（使用 marker 低摩擦；季度清理防止 Skill 膨胀）"
 
 # ============================================================================
 #  元规则（关于规则自身）
@@ -450,7 +575,7 @@ meta_rules:
 
   rule_count_cap:
     hard_limit: 20
-    current: 8
+    current: 9
     action_if_exceeded: "砍或合并，不得新增"
 
 # ============================================================================

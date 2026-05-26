@@ -1,0 +1,95 @@
+# ============================================================================
+#  Skill YAML Schema — _Skills/ reusable AI workflow assets
+#  Governed by R09. Existing legacy Skills migrate gradually; new/major edits
+#  should align with this schema.
+# ============================================================================
+
+schema_name: "skill"
+version: "0.1"
+applies_to:
+  - "_Skills/**/*.md"
+  - "especially workflow / prompt / role / block assets that are used by AI"
+
+required:
+  name:
+    type: string
+    description: "stable machine id; prefer lowercase hyphen English for runtime-exportable Skills"
+    example: "flow-log"
+  type:
+    type: enum
+    values:
+      - skill-index
+      - skill-manual
+      - role
+      - workflow
+      - prompt
+      - block
+      - template
+      - usage-rollup
+  status:
+    type: enum
+    values: [proposal, seedling, live, deprecated, archived, removed]
+    default: seedling
+    lifecycle_ref: "R09 in rules.yaml"
+  scope:
+    type: string
+    examples: ["global", "project-family:research", "project:hsi-canopy-relight"]
+  version:
+    type: string
+    example: "0.1.0"
+  updated:
+    type: date
+    format: "YYYY-MM-DD"
+  owner:
+    type: string
+    example: "flemyng"
+
+optional:
+  triggers:
+    type: string_list
+    description: "phrases or situations that should load this Skill; not required for usage-rollup/manual/index files"
+  display_name:
+    type: string
+  canonical_source:
+    type: string
+    description: "KMS path if this file is exported to local agent skill dirs"
+  requires_adapter:
+    type: boolean
+    default: false
+  usage_tracking:
+    type: enum
+    values: [none, journal_marker, external_telemetry]
+    default: journal_marker
+  linked_role:
+    type: wikilink
+  linked_workflow:
+    type: wikilink
+  entry_prompt:
+    type: wikilink
+  required_blocks:
+    type: wikilink_list
+  optional_blocks:
+    type: wikilink_list
+  target_folders:
+    type: string_list
+  scope_paths:
+    type: string_list
+  deprecation_reason:
+    type: string
+  deprecation_date:
+    type: date
+  replacement:
+    type: wikilink
+
+invariants:
+  - name: "live Skill should have triggers"
+    check: "if status == 'live' and type in [role, workflow, prompt, block] then triggers is non-empty"
+  - name: "deprecated Skill must explain replacement or reason"
+    check: "if status == 'deprecated' then deprecation_reason != null or replacement != null"
+  - name: "usage rollups are not canonical Skill bodies"
+    check: "type == 'usage-rollup' implies status in [live, archived] and no triggers required"
+  - name: "project-specific paths belong in adapters when requires_adapter=true"
+    check: "Skill body should avoid repo-specific path literals unless marked as adapter"
+
+legacy_compatibility:
+  note: "2026-05-23: existing _Skills files use Chinese type/date frontmatter. They remain valid legacy assets; align on next major edit instead of mass-churning all files."
